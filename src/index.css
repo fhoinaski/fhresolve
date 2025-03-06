@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definindo variáveis de tema */
+:root {
+  /* Tema Claro */
+  --color-primary: #1E2A44; /* Azul escuro */
+  --color-accent: #40C4FF; /* Azul claro */
+  --color-secondary: #F39C12; /* Laranja */
+  --color-neutral: #D8E2EB; /* Cinza claro */
+  --color-text: #0D1B2A; /* Preto azulado */
+  --color-dark: #071013; /* Preto profundo */
+  --color-light: #F0F4F8; /* Fundo claro */
+  --color-gray: #E0E7FF; /* Cinza azulado */
+  --color-paralel: #E0E7FF; /* Texto claro */
+  --color-highlight: #FFD700; /* Amarelo destaque */
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.5rem;
+
+  /* Adicionando cores com opacidade pré-definida */
+  --color-neutral-20: rgba(216, 226, 235, 0.2); /* D8E2EB com 20% de opacidade */
+  --color-dark-20: rgba(7, 16, 19, 0.2); /* 071013 com 20% de opacidade */
+}
+
+[data-theme="dark"] {
+  /* Tema Escuro */
+  --color-primary: #071013; /* Fundo escuro */
+  --color-accent: #40C4FF; /* Mantém o azul claro */
+  --color-secondary: #F39C12; /* Mantém o laranja */
+  --color-neutral: #2C3E50; /* Cinza escuro */
+  --color-text: #E0E7FF; /* Texto claro */
+  --color-paralel: #E0E7FF;
+  --color-dark: #E0E7FF; /* Inversão para claro */
+  --color-light: #071013; /* Fundo escuro */
+  --color-gray: #1E2A44; /* Azul escuro como cinza */
+  --color-highlight: #FFD700; /* Amarelo destaque */
+  
+  /* Cores com opacidade para o tema escuro */
+  --color-neutral-20: rgba(44, 62, 80, 0.2); /* 2C3E50 com 20% de opacidade */
+  --color-dark-20: rgba(224, 231, 255, 0.2); /* E0E7FF com 20% de opacidade */
+}
+
+/* Estilos globais */
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  overflow-y: auto;
+}
+
+html.no-scroll {
+  overflow: hidden !important;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-light);
+  min-height: 100vh;
+  margin: 0;
+  overflow-y: auto;
+}
+
+/* Componentes personalizados */
+@layer components {
+  .container {
+    @apply px-4 mx-auto max-w-7xl sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply px-6 py-3 font-medium rounded-lg text-base transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-accent)];
+  }
+
+  .btn-primary {
+    @apply bg-[var(--color-accent)] text-[var(--color-dark)] hover:bg-opacity-90 dark:text-[var(--color-primary)];
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+
+  .btn-primary:hover::after {
+    width: 200%;
+    height: 200%;
+  }
+
+  .btn-outline {
+    @apply border-2 border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-dark)] dark:hover:text-[var(--color-primary)];
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-6 text-[var(--color-primary)] dark:text-[var(--color-text)] font-poppins;
+  }
+
+  .section-subtitle {
+    @apply text-lg md:text-xl font-medium mb-8 text-[var(--color-text)] dark:text-opacity-80 dark:text-[var(--color-text)] font-inter;
+  }
+
+  .card {
+    @apply bg-[var(--color-light)] dark:bg-[var(--color-neutral)] p-6 rounded-xl shadow-md transition-all duration-300 border;
+  }
+}
+
+/* Estilo adicional para os cards usando variáveis CSS diretamente */
+.card {
+  border-color: var(--color-neutral-20);
+}
+
+.dark .card {
+  border-color: var(--color-dark-20);
+  background-color: var(--color-neutral); /* Garante fundo escuro nos cards no modo dark */
+}
+
+/* Estilos específicos */
+.leaflet-container {
+  height: 400px;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  section {
+    @apply py-28;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Keyframes para animação de loading */
+@keyframes loading {
+  from { width: 0%; }
+  to { width: 100%; }
+}
