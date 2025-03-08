@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,7 @@ function SetViewOnLocation({ location }: { location: [number, number] }) {
   return null;
 }
 
+// Ícones personalizados para marcadores do mapa
 const markerIcon = new Icon({
   iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
   iconSize: [25, 41],
@@ -29,6 +30,7 @@ const activeMarkerIcon = new Icon({
   className: 'active-marker',
 });
 
+// Dados de localizações
 const locations = [
   { name: 'Ratones', position: [-27.5132, -48.4618], primary: true },
   { name: 'Jurerê', position: [-27.4386, -48.4958] },
@@ -48,6 +50,7 @@ const ServiceMap: React.FC = () => {
   const [isUsingGeolocation, setIsUsingGeolocation] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Detectar se é dispositivo móvel
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -61,8 +64,10 @@ const ServiceMap: React.FC = () => {
     };
   }, []);
 
+  // Sinalizar quando o componente estiver montado
   useEffect(() => setIsMounted(true), []);
 
+  // Atualizar a visualização do mapa quando o local selecionado mudar
   useEffect(() => {
     if (selectedLocation) {
       const location = locations.find(loc => loc.name === selectedLocation);
@@ -72,6 +77,7 @@ const ServiceMap: React.FC = () => {
     }
   }, [selectedLocation]);
 
+  // Função para selecionar uma localização
   const handleLocationSelect = (locationName: string) => {
     setSelectedLocation(locationName);
     if (isMobile) {
@@ -80,6 +86,7 @@ const ServiceMap: React.FC = () => {
     setIsUsingGeolocation(false);
   };
 
+  // Função para obter a localização do usuário
   const handleGetUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -99,59 +106,84 @@ const ServiceMap: React.FC = () => {
     }
   };
 
+  // Variantes de animação para elementos
   const markerVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
   };
 
   const tabVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   return (
-    <section id="map" className="py-16 md:py-24 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
+    <section id="map" className="py-20 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
       <div className="container">
-        <motion.div 
-          className="text-center mb-8 md:mb-12" 
-          initial={{ opacity: 0 }} 
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="section-title">Áreas Atendidas</h2>
-          <p className="section-subtitle">Atendemos Ratones e região!</p>
-        </motion.div>
-
-        <div className="flex md:hidden mx-auto mb-6 border rounded-lg overflow-hidden shadow-md max-w-sm">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveTab('map')}
-            className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
-              activeTab === 'map' 
-                ? 'bg-[var(--color-accent)] text-white font-medium' 
-                : 'bg-[var(--color-light)] dark:bg-[var(--color-neutral)]/20 text-[var(--color-text)] dark:text-[var(--color-paralel)]'
-            }`}
-            aria-label="Ver mapa"
+        <div className="text-center mb-16">
+          <motion.span 
+            className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
           >
-            <MapIcon size={18} />
-            <span>Mapa</span>
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setActiveTab('list')}
-            className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
-              activeTab === 'list' 
-                ? 'bg-[var(--color-accent)] text-white font-medium' 
-                : 'bg-[var(--color-light)] dark:bg-[var(--color-neutral)]/20 text-[var(--color-text)] dark:text-[var(--color-paralel)]'
-            }`}
-            aria-label="Ver lista de regiões"
+            Localização
+          </motion.span>
+          <motion.h2 
+            className="section-title mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <List size={18} />
-            <span>Regiões</span>
-          </motion.button>
+            Áreas Atendidas
+          </motion.h2>
+          <motion.p 
+            className="section-subtitle dark:text-opacity-80"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Atendemos Florianópolis e região
+          </motion.p>
         </div>
 
+        {/* Seletor de abas para dispositivos móveis */}
+        {isMobile && (
+          <div className="flex mx-auto mb-6 rounded-lg overflow-hidden shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 max-w-sm">
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setActiveTab('map')}
+              className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
+                activeTab === 'map' 
+                  ? 'bg-[var(--color-accent)] text-white font-medium' 
+                  : 'bg-white dark:bg-[var(--color-neutral)]/5 text-[var(--color-text)] dark:text-[var(--color-text)]'
+              }`}
+              aria-label="Ver mapa"
+            >
+              <MapIcon size={18} />
+              <span>Mapa</span>
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setActiveTab('list')}
+              className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
+                activeTab === 'list' 
+                  ? 'bg-[var(--color-accent)] text-white font-medium' 
+                  : 'bg-white dark:bg-[var(--color-neutral)]/5 text-[var(--color-text)] dark:text-[var(--color-text)]'
+              }`}
+              aria-label="Ver lista de regiões"
+            >
+              <List size={18} />
+              <span>Regiões</span>
+            </motion.button>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {/* Lista de localizações */}
           <AnimatePresence mode="wait">
             {(activeTab === 'list' || !isMobile) && (
               <motion.div 
@@ -162,21 +194,21 @@ const ServiceMap: React.FC = () => {
                 exit="hidden"
                 variants={isMobile ? tabVariants : {}}
               >
-                <div className="bg-[var(--color-light)] dark:bg-[var(--color-neutral)]/10 rounded-xl p-4 md:p-6 shadow-md">
-                  <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 flex items-center">
-                    <MapPin className="h-5 w-5 md:h-6 md:w-6 text-[var(--color-accent)] mr-2" /> 
+                <div className="bg-white dark:bg-[var(--color-neutral)]/5 rounded-xl p-5 shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20">
+                  <h3 className="text-lg font-medium mb-6 flex items-center text-[var(--color-text)] dark:text-[var(--color-text)]">
+                    <MapPin className="h-5 w-5 text-[var(--color-accent)] mr-2" /> 
                     Regiões Atendidas
                   </h3>
-                  <ul className="space-y-2 md:space-y-3">
+                  <ul className="space-y-2">
                     {locations.map((location) => (
                       <motion.li
                         key={location.name}
-                        className={`p-3 rounded-lg cursor-pointer ${
+                        className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                           location.name === selectedLocation
-                            ? 'bg-[var(--color-accent)] text-white shadow-md' 
-                            : 'bg-[var(--color-neutral)]/10 dark:bg-[var(--color-neutral)]/20 hover:bg-[var(--color-neutral)]/20 dark:hover:bg-[var(--color-neutral)]/30'
-                        } transition-all duration-300`}
-                        whileHover={{ scale: 1.02, x: 3 }}
+                            ? 'bg-[var(--color-accent)] text-white' 
+                            : 'bg-[var(--color-gray)] dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-neutral)]/20 dark:hover:bg-[var(--color-neutral)]/20'
+                        }`}
+                        whileHover={{ scale: 1.02, x: 2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleLocationSelect(location.name)}
                       >
@@ -193,23 +225,26 @@ const ServiceMap: React.FC = () => {
                             }`} />
                           </span>
                           <span className="font-medium">{location.name}</span>
+                          {location.primary && location.name === selectedLocation && (
+                            <span className="text-xs ml-auto bg-white/20 px-2 py-0.5 rounded-full">Principal</span>
+                          )}
                         </div>
                       </motion.li>
                     ))}
                   </ul>
                   
                   <div className="mt-6 pt-4 border-t border-[var(--color-neutral)]/20 dark:border-[var(--color-neutral)]/10">
-                    <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-paralel)]/70 italic mb-4">
-                      Atendemos estas regiões e arredores.
+                    <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-text)]/70 mb-4">
+                      Atendemos estas regiões e arredores. Consulte disponibilidade.
                     </p>
                     <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={handleGetUserLocation}
-                      className="w-full py-2 px-4 bg-[var(--color-light)] dark:bg-[var(--color-neutral)]/20 hover:bg-[var(--color-secondary)]/10 rounded-lg flex items-center justify-center gap-2 border border-[var(--color-neutral)]/20 dark:border-[var(--color-neutral)]/10 transition-colors"
+                      className="w-full py-2 px-4 bg-white dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/5 rounded-lg flex items-center justify-center gap-2 border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 transition-colors"
                     >
-                      <Navigation size={16} className="text-[var(--color-secondary)]" />
-                      <span>Ver minha localização</span>
+                      <Navigation size={16} className="text-[var(--color-accent)]" />
+                      <span className="text-[var(--color-text)] dark:text-[var(--color-text)]">Minha localização</span>
                     </motion.button>
                   </div>
                 </div>
@@ -217,6 +252,7 @@ const ServiceMap: React.FC = () => {
             )}
           </AnimatePresence>
 
+          {/* Componente do mapa */}
           <AnimatePresence mode="wait">
             {(activeTab === 'map' || !isMobile) && (
               <motion.div
@@ -227,7 +263,7 @@ const ServiceMap: React.FC = () => {
                 exit="hidden"
                 variants={isMobile ? tabVariants : {}}
               >
-                <div className="bg-[var(--color-light)] dark:bg-[var(--color-neutral)]/10 rounded-xl p-2 shadow-md h-[500px] md:h-[600px] relative overflow-hidden">
+                <div className="bg-white dark:bg-[var(--color-neutral)]/5 rounded-xl p-2 shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 h-[450px] md:h-[500px] relative overflow-hidden">
                   {isMounted && (
                     <MapContainer 
                       center={[-27.5132, -48.4618]} 
@@ -242,6 +278,7 @@ const ServiceMap: React.FC = () => {
                       
                       <SetViewOnLocation location={currentView} />
                       
+                      {/* Marcador de localização do usuário */}
                       {isUsingGeolocation && (
                         <motion.div
                           initial={{ opacity: 0, scale: 0 }}
@@ -263,8 +300,8 @@ const ServiceMap: React.FC = () => {
                             center={currentView} 
                             radius={300}
                             pathOptions={{
-                              color: '#F39C12',
-                              fillColor: '#F39C12',
+                              color: '#2D9CDB',
+                              fillColor: '#2D9CDB',
                               fillOpacity: 0.2,
                               weight: 2
                             }}
@@ -272,6 +309,7 @@ const ServiceMap: React.FC = () => {
                         </motion.div>
                       )}
                       
+                      {/* Marcadores das regiões */}
                       {locations.map((location) => (
                         <motion.div 
                           key={location.name} 
@@ -290,9 +328,9 @@ const ServiceMap: React.FC = () => {
                             }}
                           >
                             <Popup>
-                              <div className="text-center">
+                              <div className="text-center p-1">
                                 <h3 className="font-bold text-base mb-1">{location.name}</h3>
-                                <p className="text-sm">Área atendida pela FH Resolve</p>
+                                <p className="text-sm">Área atendida</p>
                                 {location.primary && (
                                   <span className="inline-block mt-1 px-2 py-0.5 bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-xs rounded-full">
                                     Sede Principal
@@ -305,8 +343,8 @@ const ServiceMap: React.FC = () => {
                             center={location.position as [number, number]} 
                             radius={2000}
                             pathOptions={{
-                              color: location.name === selectedLocation ? '#40C4FF' : '#9e9e9e',
-                              fillColor: location.name === selectedLocation ? '#40C4FF' : '#9e9e9e',
+                              color: location.name === selectedLocation ? '#2D9CDB' : '#9e9e9e',
+                              fillColor: location.name === selectedLocation ? '#2D9CDB' : '#9e9e9e',
                               fillOpacity: location.name === selectedLocation ? 0.2 : 0.1,
                               weight: location.name === selectedLocation ? 2 : 1
                             }}
@@ -316,8 +354,9 @@ const ServiceMap: React.FC = () => {
                     </MapContainer>
                   )}
                   
+                  {/* Botão de localização */}
                   <motion.button 
-                    className="absolute bottom-4 right-4 bg-white dark:bg-[var(--color-primary)] p-3 rounded-full shadow-lg text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors z-[1000] border border-[var(--color-neutral)]/20"
+                    className="absolute bottom-4 right-4 bg-white dark:bg-[var(--color-primary)] p-3 rounded-full shadow-md text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors z-[1000] border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20"
                     onClick={handleGetUserLocation}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -326,13 +365,14 @@ const ServiceMap: React.FC = () => {
                     <Navigation size={20} />
                   </motion.button>
                   
+                  {/* Indicador de localização selecionada em dispositivos móveis */}
                   {isMobile && selectedLocation && !isUsingGeolocation && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute top-4 left-0 right-0 mx-auto w-max bg-white dark:bg-[var(--color-neutral)]/90 px-4 py-2 rounded-full shadow-lg z-[1000] flex items-center gap-2"
+                      className="absolute top-4 left-0 right-0 mx-auto w-max bg-white dark:bg-[var(--color-neutral)]/80 px-3 py-1.5 rounded-full shadow-md z-[1000] flex items-center gap-2"
                     >
-                      <MapPin size={16} className="text-[var(--color-accent)]" />
+                      <MapPin size={14} className="text-[var(--color-accent)]" />
                       <span className="font-medium text-sm">{selectedLocation}</span>
                     </motion.div>
                   )}
@@ -342,9 +382,9 @@ const ServiceMap: React.FC = () => {
           </AnimatePresence>
         </div>
         
-        <div className="mt-6 text-center md:hidden">
-          <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-paralel)]/70 italic">
-            Toque nos marcadores para ver detalhes da região
+        <div className="mt-6 text-center">
+          <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-text)]/70 italic">
+            Verifique disponibilidade para sua região
           </p>
         </div>
       </div>

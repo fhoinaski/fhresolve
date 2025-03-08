@@ -1,5 +1,4 @@
-// src/components/Header.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, Wrench, MessageCircle } from 'lucide-react';
 
@@ -19,15 +18,14 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
     { name: 'Início', href: '#hero' },
     { name: 'Sobre', href: '#about' },
     { name: 'Serviços', href: '#benefits' },
-    { name: 'Portfólio', href: '#portfolio' },
+    { name: 'Projetos', href: '#portfolio' },
     { name: 'Depoimentos', href: '#testimonials' },
-    { name: 'Áreas Atendidas', href: '#map' },
     { name: 'Contato', href: '#contact' },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
 
       const sections = navLinks.map(link => link.href.slice(1));
 
@@ -66,38 +64,36 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
     }
   };
 
-  // Aplicar um fundo mais sólido para melhorar legibilidade
+  // Design minimalista com transparência e backdrop blur
   const getHeaderBackground = () => {
     if (isOpen) {
       return theme === 'light'
-        ? 'bg-[var(--color-light)]'
-        : 'bg-[var(--color-primary)]';
+        ? 'bg-white/95 backdrop-blur-md'
+        : 'bg-[var(--color-primary)]/95 backdrop-blur-md';
     }
 
     if (scrolled) {
       return theme === 'light'
-        ? 'bg-[var(--color-light)] shadow-lg'
-        : 'bg-[var(--color-primary)] shadow-lg';
+        ? 'bg-white/90 backdrop-blur-md shadow-sm'
+        : 'bg-[var(--color-primary)]/90 backdrop-blur-md shadow-sm';
     }
 
-    // Quando não rolado, usamos um gradiente para garantir legibilidade
     return theme === 'light'
-      ? 'bg-gradient-to-b from-[var(--color-light)] to-[var(--color-light)]/90 backdrop-blur-md'
-      : 'bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary)]/90 backdrop-blur-md';
+      ? 'bg-white/80 backdrop-blur-sm'
+      : 'bg-[var(--color-primary)]/80 backdrop-blur-sm';
   };
 
-  // Para melhorar legibilidade adicionamos mais contraste nos textos
+  // Estilo minimalista para links
   const getLinkClass = (isActive: boolean) => {
-    const baseClass = "relative font-medium transition-colors";
+    const baseClass = "relative font-medium py-2 px-1 transition-colors";
     
     if (isActive) {
-      return `${baseClass} text-[var(--color-accent)] font-bold`;
+      return `${baseClass} text-[var(--color-accent)]`;
     }
     
-    // Aplicamos bordas sutis para melhorar legibilidade
     return theme === 'light' 
-      ? `${baseClass} text-[var(--color-primary)] hover:text-[var(--color-accent)]` 
-      : `${baseClass} text-[var(--color-paralel)] hover:text-[var(--color-accent)]`;
+      ? `${baseClass} text-[var(--color-primary)]/80 hover:text-[var(--color-accent)]` 
+      : `${baseClass} text-[var(--color-text)]/80 hover:text-[var(--color-accent)]`;
   };
 
   return (
@@ -105,11 +101,9 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
       ref={headerRef}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed w-full z-50 transition-all duration-300 py-3 border-b ${
-        theme === 'light' 
-          ? 'border-[var(--color-neutral)]/20' 
-          : 'border-[var(--color-dark)]/20'
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className={`fixed w-full z-50 transition-all duration-300 py-4 ${
+        scrolled ? 'py-3' : 'py-4'
       } ${getHeaderBackground()}`}
       aria-label="Navegação principal"
     >
@@ -120,15 +114,15 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
             e.preventDefault();
             handleLinkClick('#hero');
           }}
-          className="flex items-center gap-2 z-20"
+          className="flex items-center gap-2 z-50"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Wrench className="h-8 w-8 text-[var(--color-accent)]" aria-hidden="true" />
-          <span className="text-xl font-bold text-[var(--color-text)] dark:text-[var(--color-paralel)]">FH Resolve</span>
+          <Wrench className="h-6 w-6 text-[var(--color-accent)]" aria-hidden="true" />
+          <span className="text-lg font-bold text-[var(--color-accent)] dark:text-[var(--color-text)] font-jakarta">FH Resolve</span>
         </motion.a>
 
         <nav className="hidden md:flex items-center gap-6" aria-label="Menu de navegação desktop">
@@ -143,14 +137,15 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
                   handleLinkClick(link.href);
                 }}
                 className={getLinkClass(isActive)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
               >
                 {link.name}
                 {isActive && (
                   <motion.div
-                    className="absolute -bottom-1 left-0 w-full h-1 bg-[var(--color-accent)] rounded-full"
+                    className="absolute -bottom-1 left-0 w-full h-0.5 bg-[var(--color-accent)] rounded-full"
                     layoutId="activeNavIndicator"
+                    transition={{ duration: 0.3 }}
                   />
                 )}
               </motion.a>
@@ -161,57 +156,58 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
         <div className="flex items-center gap-4">
           <motion.button
             onClick={toggleTheme}
-            className="p-2 rounded-full bg-[var(--color-neutral)]/20 hover:bg-[var(--color-accent)]/20 transition-colors border border-[var(--color-neutral)]/30"
-            whileHover={{ scale: 1.1, rotate: 15 }}
+            className="p-2 rounded-full bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/10 transition-colors z-50"
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label={`Alternar para tema ${theme === 'light' ? 'escuro' : 'claro'}`}
           >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </motion.button>
 
           <motion.a
             href="https://wa.me/5548991919791"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white rounded-full hover:bg-opacity-90 transition-all shadow-md"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white rounded-full hover:bg-[var(--color-accent)]/90 transition-all shadow-sm z-50"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             aria-label="Contato via WhatsApp"
           >
-            <MessageCircle size={18} aria-hidden="true" />
+            <MessageCircle size={16} aria-hidden="true" />
             <span className="text-sm font-medium">WhatsApp</span>
           </motion.a>
 
           <motion.button
-            className="md:hidden z-50 p-2 bg-[var(--color-accent)] text-white rounded-lg shadow-md"
+            className="md:hidden z-50 p-2 rounded-md bg-[var(--color-accent)] text-white"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
           </motion.button>
         </div>
 
-        {/* Menu Mobile - Modificado para funcionar corretamente */}
+        {/* Menu Mobile - Corrigido para abrir completamente */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               id="mobile-menu"
               ref={navRef}
-              className="fixed inset-0 pt-16 pb-8 px-4 md:hidden z-40 overflow-y-auto"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-0 w-full min-h-screen md:hidden z-50 overflow-y-auto" // Garantindo altura mínima total
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.3 }}
               style={{
-                backgroundColor: theme === 'light' ? 'var(--color-light)' : 'var(--color-primary)',
-                top: headerRef.current ? headerRef.current.offsetHeight : 0
+                backgroundColor: theme === 'light' ? 'rgba(255, 255, 255, 0.98)' : 'rgba(17, 24, 39, 0.98)',
+                backdropFilter: 'blur(10px)',
               }}
             >
-              <div className="container py-4">
-                <div className="flex flex-col gap-3">
+              <div className="container pt-20 pb-8 px-4 min-h-screen flex flex-col justify-between">
+                <div className="flex flex-col gap-2">
                   {navLinks.map((link) => {
                     const isActive = activeSection === link.href.slice(1);
                     return (
@@ -224,27 +220,28 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
                         }}
                         className={`block py-3 px-4 text-base font-medium rounded-lg transition-colors ${
                           isActive
-                            ? `bg-[var(--color-accent)]/20 text-[var(--color-accent)] font-bold border-l-4 border-[var(--color-accent)]`
-                            : `text-[var(--color-text)] dark:text-[var(--color-paralel)] hover:bg-[var(--color-neutral)]/10`
+                            ? `bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-medium border-l-2 border-[var(--color-accent)]`
+                            : `text-[var(--color-text)]/80 dark:text-[var(--color-text)]/80 hover:bg-[var(--color-neutral)]/10`
                         }`}
-                        whileHover={{ x: 5 }}
+                        whileHover={{ x: 3 }}
+                        whileTap={{ x: 0 }}
                       >
                         {link.name}
                       </motion.a>
                     );
                   })}
+                </div>
 
-                  <div className="mt-6 pt-4 border-t border-[var(--color-neutral)]/20">
-                    <a
-                      href="https://wa.me/5548991919791"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 bg-[var(--color-accent)] text-white py-3 px-4 rounded-lg font-medium shadow-md"
-                    >
-                      <MessageCircle size={20} />
-                      Fale pelo WhatsApp
-                    </a>
-                  </div>
+                <div className="mt-6 pt-4 border-t border-[var(--color-neutral)]/20">
+                  <a
+                    href="https://wa.me/5548991919791"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-[var(--color-accent)] text-white py-3 px-4 rounded-lg font-medium"
+                  >
+                    <MessageCircle size={18} />
+                    Fale pelo WhatsApp
+                  </a>
                 </div>
               </div>
             </motion.div>

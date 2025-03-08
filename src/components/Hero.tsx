@@ -2,96 +2,62 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
-import { MessageCircle, CreditCard, Sparkles, ChevronDown } from 'lucide-react';
+import { MessageCircle, CreditCard, ArrowDown, Wrench, Droplet } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface CardData {
+interface ServiceCardProps {
+  icon: React.ReactNode;
   title: string;
   desc: string;
+  index: number;
 }
+
+const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, desc, index }) => (
+  <motion.div
+    className="service-card bg-white/10 dark:bg-white/5 backdrop-blur-sm dark:backdrop-blur-md p-4 rounded-xl border border-white/20 transition-all duration-300"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.1 * index, duration: 0.5 }}
+    whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
+  >
+    <div className="flex items-start gap-3">
+      <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[var(--color-accent)]/20 text-[var(--color-accent)] flex-shrink-0">
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-lg font-medium mb-1 text-[var(--color-text)]">{title}</h3>
+        <p className="text-sm text-[var(--color-text)]/80">{desc}</p>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const cardContainerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const cardData: CardData[] = [
-    { title: 'Reparos Elétricos', desc: 'Instalações e consertos elétricos.' },
-    { title: 'Hidráulica', desc: 'Soluções para vazamentos e encanamentos.' },
-    { title: 'Serviços Gerais', desc: 'Montagem e pequenos reparos.' },
+  const services = [
+    { icon: <Wrench size={20} />, title: 'Reparos Elétricos', desc: 'Instalações e consertos elétricos profissionais.' },
+    { icon: <Droplet size={20} />, title: 'Hidráulica', desc: 'Soluções para vazamentos e encanamentos.' },
+    { icon: <Wrench size={20} />, title: 'Serviços Gerais', desc: 'Montagem de móveis e pequenos reparos.' },
   ];
 
   useEffect(() => {
     const heroElement = heroRef.current;
-    const cardContainerElement = cardContainerRef.current;
-    const titleElement = titleRef.current;
+    const contentElement = contentRef.current;
 
-    if (!heroElement || !cardContainerElement || !titleElement) return;
+    if (!heroElement || !contentElement) return;
 
-    const titles = titleElement.querySelectorAll('.hero-title');
-    const subtitleElement = subtitleRef.current;
-    const descElement = descRef.current;
-    const ctaElement = ctaRef.current;
-    const cards = cardContainerElement.querySelectorAll('.service-card');
-
-    // Configuração inicial para animação
-    gsap.set([titles, subtitleElement, descElement, ctaElement], { opacity: 0, y: 30 });
-    gsap.set(cards, { opacity: 0, y: 20 });
-    gsap.set('.hero-bg-overlay', { opacity: 0 });
-    gsap.set('.scroll-indicator', { opacity: 0, y: 10 });
-    
-    // Timeline principal com sequência de animações - inicia imediatamente
+    // Timeline principal com sequência de animações
     const tl = gsap.timeline({ 
       defaults: { ease: 'power3.out' },
-      delay: 0.3 // Pequeno delay para permitir que a página seja renderizada
+      delay: 0.3
     });
     
-    // Animação do fundo
-    tl.to('.hero-bg-overlay', 
-      { opacity: 1, duration: 1.2, ease: 'power2.inOut' }
-    );
-    
-    // Animação dos títulos e conteúdo
-    tl.to(titles[0], { opacity: 1, y: 0, duration: 0.8 }, '-=0.8')
-      .to(titles[1], { opacity: 1, y: 0, duration: 0.8 }, '-=0.6')
-      .to(subtitleElement, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
-      .to(descElement, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
-      .to(ctaElement, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3');
-    
-    // Animação dos cards com stagger
-    tl.to(cards, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.15,
-      duration: 0.6,
-      ease: 'back.out(1.4)',
-    }, '-=0.4');
-    
-    // Animação do indicador de scroll
-    tl.to('.scroll-indicator', {
-      opacity: 1,
-      y: 0,
-      duration: 0.6
-    }, '-=0.2');
-
-    // Animação dos sparkles
-    gsap.to('.hero-sparkle', { 
-      opacity: 'random(0.3, 0.7)',
-      scale: 'random(0.7, 1.3)',
-      duration: 'random(1, 2)',
-      delay: 'random(0.3, 1)',
-      repeat: -1,
-      yoyo: true,
-      stagger: 0.1
-    });
-
-    // Parallax suave no scroll
+    // Animação do fundo com parallax suave
     gsap.to('.hero-bg', {
-      y: '20%',
+      y: '30%',
       ease: 'none',
       scrollTrigger: {
         trigger: heroElement,
@@ -107,27 +73,6 @@ const Hero: React.FC = () => {
     };
   }, []);
 
-  const renderSparkles = () => {
-    const sparkles = [];
-    for (let i = 0; i < 20; i++) {
-      sparkles.push(
-        <div
-          key={i}
-          className="hero-sparkle absolute rounded-full bg-white"
-          style={{
-            width: `${Math.random() * 8 + 2}px`,
-            height: `${Math.random() * 8 + 2}px`,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            opacity: 0, // Começa invisível
-            filter: 'blur(1px)'
-          }}
-        />
-      );
-    }
-    return sparkles;
-  };
-
   // Função para scroll suave para a próxima seção
   const scrollToNextSection = () => {
     const aboutSection = document.getElementById('about');
@@ -140,124 +85,127 @@ const Hero: React.FC = () => {
     <section
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-[140vh] sm:min-h-[120vh] flex items-center justify-center overflow-hidden pt-16 sm:pt-20 md:pt-0 pb-24 sm:pb-12" // Altura aumentada e padding ajustado
     >
-      {/* Background com intensidade ajustada */}
+      {/* Background minimalista e moderno */}
       <div
         className="hero-bg absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+            "url('https://images.unsplash.com/photo-1574873934798-d7ef3dc98c86?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
         }}
       >
-        {/* Overlay com menor opacidade para maior destaque */}
-        <div className="hero-bg-overlay absolute inset-0 bg-gradient-to-br from-[#1a1a1a]/80 via-[#1a1a1a]/70 to-[var(--color-secondary)]/30"></div>
-        
-        {/* Sparkles de fundo */}
-        {renderSparkles()}
+        {/* Overlay com gradiente mais limpo e moderno */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary)]/90 via-[var(--color-primary)]/80 to-[var(--color-primary)]/70"></div>
       </div>
 
-      {/* Adicionamos um padding-top maior no mobile para evitar sobreposição com o header */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 sm:pt-32 sm:pb-16 md:py-16">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-          <div className="w-full lg:w-1/2 max-w-lg mx-auto lg:mx-0">
-            {/* Reposicionamos a tag de manutenção residencial */}
-            <div ref={subtitleRef} className="mb-6 flex items-center">
-              <div className="h-1 w-6 bg-[var(--color-accent)] mr-2 rounded-full"></div>
-              <div className="text-base sm:text-lg font-medium text-white">Manutenção Residencial</div>
-            </div>
+      {/* Conteúdo principal */}
+      <div ref={contentRef} className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-0">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
+          <div className="w-full lg:w-1/2 max-w-xl">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ duration: 0.8 }}
+              className="mb-4 inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/30"
+            >
+              <span className="text-sm font-medium text-[var(--color-accent)]">Manutenção Residencial</span>
+            </motion.div>
 
-            <div ref={titleRef} className="overflow-hidden mb-4">
-              <h1 className="flex flex-col">
-                <span className="hero-title text-4xl sm:text-5xl md:text-6xl font-bold font-oswald leading-tight tracking-tighter text-white">
-                  FH
-                </span>
-                <span className="hero-title text-4xl sm:text-5xl md:text-6xl font-bold font-oswald leading-tight tracking-tighter text-[var(--color-accent)]">
-                  Resolve
-                </span>
-              </h1>
-            </div>
+            <motion.h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text)] mb-4 font-jakarta leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              <span className="block">Serviços de</span>
+              <span className="text-[var(--color-accent)]">Manutenção</span>
+              <span className="block">em Florianópolis</span>
+            </motion.h1>
 
-            <p ref={descRef} className="text-sm sm:text-base md:text-lg max-w-md leading-relaxed mb-6 text-white/90">
-              Soluções simples e confiáveis para reparos elétricos, hidráulicos e serviços gerais na sua casa.
-            </p>
+            <motion.p 
+              className="text-lg text-[var(--color-text)]/80 mb-8 max-w-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Soluções rápidas e profissionais para reparos elétricos, hidráulicos e serviços gerais na sua casa ou empresa.
+            </motion.p>
 
-            <div ref={ctaRef} className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            <motion.div 
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
               <motion.a
                 href="https://wa.me/5548991919791"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-accent)] text-white rounded-full font-semibold text-sm sm:text-base w-full sm:w-auto hover:bg-opacity-90 transition-all duration-300 shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-text-light)] rounded-lg font-medium hover:bg-[var(--color-accent)]/90 transition-all shadow-md"
+                whileHover={{ scale: 1.03, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)" }}
+                whileTap={{ scale: 0.97 }}
               >
                 <MessageCircle size={18} />
-                Fale Comigo
+                Solicitar Orçamento
               </motion.a>
               <motion.div 
-                className="flex items-center gap-2 text-sm sm:text-base bg-white/15 py-2 px-4 rounded-full border border-white/20"
-                whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-lg border border-[var(--color-neutral)]/20 text-[var(--color-text)]"
+                whileHover={{ backgroundColor: 'rgba(var(--color-neutral-rgb), 0.1)' }}
               >
-                <CreditCard size={16} className="text-[var(--color-accent)]" />
-                <span className="text-white">
-                  Até <strong className="text-[var(--color-accent)]">12x sem juros</strong>
+                <CreditCard size={18} className="text-[var(--color-accent)]" />
+                <span className="text-sm">
+                  Até <strong>12x</strong> no cartão
                 </span>
               </motion.div>
-            </div>
-
-            <div className="mt-8 flex items-center gap-2">
-              <Sparkles size={16} className="text-[var(--color-secondary)]" />
-              <p className="text-[var(--color-secondary)] italic text-sm sm:text-base">
-                Atendimento em Florianópolis e região
-              </p>
-            </div>
+            </motion.div>
           </div>
 
-          <div ref={cardContainerRef} className="w-full lg:w-1/2 mt-6 lg:mt-0 flex flex-col gap-3 sm:gap-4">
-            {cardData.map((card, index) => (
-              <motion.div
+          <div className="w-full lg:w-1/2 space-y-4">
+            {services.map((service, index) => (
+              <ServiceCard 
                 key={index}
-                className="service-card bg-white/15 p-4 sm:p-5 rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300"
-                whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)' }}
-              >
-                <div className="flex items-start">
-                  <div className="h-8 w-8 flex items-center justify-center rounded-full bg-[var(--color-accent)]/30 mr-3">
-                    <div className="h-6 w-6 flex items-center justify-center rounded-full bg-[var(--color-accent)]">
-                      <span className="text-white font-bold text-sm">{index + 1}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-semibold mb-1 text-white">{card.title}</h3>
-                    <p className="text-xs sm:text-sm text-white/80">{card.desc}</p>
-                  </div>
-                </div>
-              </motion.div>
+                icon={service.icon}
+                title={service.title}
+                desc={service.desc}
+                index={index}
+              />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Indicador de scroll */}
-      <div 
-        className="scroll-indicator absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer"
+      {/* Indicador de scroll - ajustado para responsividade */}
+      <motion.div 
+        className="absolute bottom-8 sm:bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 cursor-pointer z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
         onClick={scrollToNextSection}
       >
-        <p className="text-xs text-white/80 uppercase tracking-widest mb-2">Saiba mais</p>
         <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="flex flex-col items-center"
         >
-          <ChevronDown size={24} className="text-[var(--color-accent)]" />
+          <span className="text-[var(--color-text)]/60 text-sm mb-2 font-medium tracking-wide">Saiba Mais</span>
+          <ArrowDown className="text-[var(--color-accent)] h-10 w-5" />
         </motion.div>
-      </div>
+      </motion.div>
 
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] translate-y-[1px]">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" className="w-full block">
-          <path
-            fill="var(--color-gray)"
-            fillOpacity="1"
-            d="M0,96L60,85.3C120,75,240,53,360,48C480,43,600,53,720,69.3C840,85,960,107,1080,101.3C1200,96,1320,64,1380,48L1440,32L1440,120L1380,120C1320,120,1200,120,1080,120C960,120,840,120,720,120C600,120,480,120,360,120C240,120,120,120,60,120L0,120Z"
-          ></path>
+      {/* Forma decorativa na parte inferior */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden h-16 z-20">
+        <svg 
+          data-name="Layer 1" 
+          xmlns="http://www.w3.org/2000/svg" 
+          viewBox="0 0 1200 120" 
+          preserveAspectRatio="none" 
+          className="h-full w-full"
+        >
+          <path 
+            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" 
+            className="fill-white dark:fill-[var(--color-light)]"
+          />
         </svg>
       </div>
     </section>

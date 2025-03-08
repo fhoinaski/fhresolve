@@ -1,91 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Paleta de cores ajustada para melhor contraste */
 :root {
   /* Tema Claro */
-  --color-primary: #1E2A44; /* Azul escuro */
-  --color-accent: #40C4FF; /* Azul claro */
-  --color-secondary: #F39C12; /* Laranja */
-  --color-neutral: #D8E2EB; /* Cinza claro */
-  --color-text: #0D1B2A; /* Preto azulado */
-  --color-dark: #071013; /* Preto profundo */
-  --color-light: #F0F4F8; /* Fundo claro */
-  --color-gray: #E0E7FF; /* Cinza azulado */
-  --color-paralel: #E0E7FF; /* Texto claro */
-  --color-highlight: #FFD700; /* Amarelo destaque */
-  
-  /* RGB para animações */
-  --color-accent-rgb: 64, 196, 255;
-  --color-secondary-rgb: 243, 156, 18;
-  
-  /* Tamanhos de fonte */
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 2.5rem;
-
-  /* Adicionando cores com opacidade pré-definida */
-  --color-neutral-20: rgba(216, 226, 235, 0.2); /* D8E2EB com 20% de opacidade */
-  --color-dark-20: rgba(7, 16, 19, 0.2); /* 071013 com 20% de opacidade */
-  
-  /* Variáveis de espaçamento */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  
-  /* Variáveis de borda */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  
-  /* Variáveis de transição */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
-  
-  /* Variáveis de sombra */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --color-primary: #1E3A8A; /* Azul escuro mais vibrante para fundo ou destaque */
+  --color-accent: #3B82F6; /* Azul claro e vibrante para ações */
+  --color-secondary: #6B7280; /* Cinza médio para detalhes secundários */
+  --color-neutral: #F3F4F6; /* Cinza muito claro para fundos neutros */
+  --color-text: #111827; /* Preto suave para texto com alto contraste */
+  --color-text-light: #FFFFFF; /* Branco puro para contraste em fundos escuros */
+  --color-dark: #1F2937; /* Cinza escuro para elementos mais profundos */
+  --color-light: #FFFFFF; /* Branco puro para fundos principais */
+  --color-gray: #F9FAFB; /* Cinza extremamente claro para fundos alternativos */
+  --color-card-bg: #FFFFFF; /* Fundo de cards no modo claro */
+  --color-card-text: #111827; /* Texto de cards no modo claro */
+  --color-paralel: #F9FAFB;
+  /* RGB para animações e opacidades */
+  --color-accent-rgb: 59, 130, 246;
+  --color-secondary-rgb: 107, 114, 128;
+  --color-neutral-rgb: 243, 244, 246;
 }
 
 [data-theme="dark"] {
   /* Tema Escuro */
-  --color-primary: #071013; /* Fundo escuro */
-  --color-accent: #40C4FF; /* Mantém o azul claro */
-  --color-secondary: #F39C12; /* Mantém o laranja */
-  --color-neutral: #2C3E50; /* Cinza escuro */
-  --color-text: #E0E7FF; /* Texto claro */
-  --color-paralel: #E0E7FF;
-  --color-dark: #E0E7FF; /* Inversão para claro */
-  --color-light: #071013; /* Fundo escuro */
-  --color-gray: #1E2A44; /* Azul escuro como cinza */
-  --color-highlight: #FFD700; /* Amarelo destaque */
-  
-  /* Cores com opacidade para o tema escuro */
-  --color-neutral-20: rgba(44, 62, 80, 0.2); /* 2C3E50 com 20% de opacidade */
-  --color-dark-20: rgba(224, 231, 255, 0.2); /* E0E7FF com 20% de opacidade */
+  --color-primary: #1E293B; /* Azul escuro profundo para fundo principal */
+  --color-accent: #60A5FA; /* Azul mais claro e vibrante para destaque */
+  --color-secondary: #9CA3AF; /* Cinza claro para elementos secundários */
+  --color-neutral: #374151; /* Cinza médio escuro para fundos neutros */
+  --color-text: #F9FAFB; /* Branco suave para texto com alto contraste */
+  --color-text-light: #FFFFFF; /* Branco puro para máximo contraste */
+  --color-dark: #111827; /* Preto profundo para detalhes */
+  --color-light: #1E293B; /* Fundo escuro principal */
+  --color-gray: #2D3748; /* Cinza escuro para fundos alternativos */
+  --color-paralel: #F9FAFB; /* Cor paralela para destaque */
+  --color-card-bg: #1F2937; /* Fundo de cards no modo escuro */
+  --color-card-text: #F9FAFB; /* Texto de cards no modo escuro */
 }
 
 /* Definindo fontes */
-.font-oswald {
-  font-family: 'Oswald', sans-serif;
+.font-jakarta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .font-inter {
   font-family: 'Inter', sans-serif;
 }
 
-.font-poppins {
-  font-family: 'Poppins', sans-serif;
+.font-dm {
+  font-family: 'DM Sans', sans-serif;
 }
 
 /* Estilos globais */
@@ -107,6 +72,8 @@ body {
   min-height: 100vh;
   margin: 0;
   overflow-y: auto;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
 /* Melhorando as transições para suavidade */
@@ -116,18 +83,18 @@ body {
   transition-duration: 150ms;
 }
 
-/* Estilização de scrollbar personalizada */
+/* Estilização de scrollbar minimalista e fina */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-neutral-20);
+  background: rgba(243, 244, 246, 0.2); /* Ajustado para neutral no modo claro */
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-accent);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -138,7 +105,7 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: var(--radius-sm);
+  border-radius: 0.25rem;
 }
 
 /* Componentes personalizados */
@@ -148,65 +115,79 @@ body {
   }
 
   .btn {
-    @apply px-6 py-3 font-medium rounded-lg text-base transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply px-6 py-3 font-medium rounded-lg text-base transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
 
   .btn-primary {
-    @apply bg-[var(--color-accent)] text-[var(--color-dark)] hover:bg-opacity-90 dark:text-[var(--color-primary)];
+    @apply bg-[var(--color-accent)] text-[var(--color-text-light)] hover:bg-opacity-90;
   }
 
   .btn-secondary {
-    @apply bg-[var(--color-secondary)] text-[var(--color-dark)] hover:bg-opacity-90 dark:text-[var(--color-primary)];
+    @apply bg-[var(--color-secondary)] text-[var(--color-text-light)] hover:bg-opacity-90;
   }
 
   .btn-outline {
-    @apply border-2 border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-dark)] dark:hover:text-[var(--color-primary)];
+    @apply border border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-[var(--color-text)] hover:bg-opacity-10;
+    @apply bg-transparent text-[var(--color-text)] hover:bg-[var(--color-neutral)]/20;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-[var(--color-primary)] dark:text-[var(--color-text)] font-poppins;
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-[var(--color-text)] font-jakarta tracking-tight;
   }
 
   .section-subtitle {
-    @apply text-lg md:text-xl font-medium mb-8 text-[var(--color-text)] dark:text-opacity-80 dark:text-[var(--color-text)] font-inter;
+    @apply text-base md:text-lg font-normal mb-8 text-[var(--color-text)] opacity-80 font-inter leading-relaxed max-w-3xl mx-auto;
   }
 
   .card {
-    @apply bg-[var(--color-light)] dark:bg-[var(--color-neutral)] p-6 rounded-xl shadow-md transition-all duration-300 border;
+    @apply bg-[var(--color-card-bg)] p-6 rounded-xl shadow-sm transition-all duration-300 border border-neutral-30 backdrop-blur-sm;
   }
-  
+
+  .card-text {
+    @apply text-[var(--color-card-text)];
+  }
+
+  .card-text-secondary {
+    @apply text-[var(--color-card-text)] opacity-80;
+  }
+
   .card-hover {
-    @apply hover:shadow-lg hover:-translate-y-1;
+    @apply hover:shadow-md hover:-translate-y-1 hover:border-accent-20;
   }
-  
+
   .input-field {
-    @apply w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 dark:bg-opacity-50 transition-all;
+    @apply w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 dark:bg-[var(--color-neutral)]/10 dark:border-[var(--color-neutral)]/20 transition-all;
   }
-  
+
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
-  
+
   .badge-primary {
-    @apply bg-opacity-20 text-[var(--color-accent)];
+    @apply bg-[var(--color-accent)]/20 text-[var(--color-accent)];
   }
-  
+
   .badge-secondary {
-    @apply bg-opacity-20 text-[var(--color-secondary)];
+    @apply bg-[var(--color-secondary)]/20 text-[var(--color-secondary)];
   }
 }
 
-/* Estilos diretos para os cards */
-.card {
-  border-color: var(--color-neutral-20);
+/* Utilitários de texto para contraste */
+.text-contrast {
+  color: var(--color-text);
 }
 
-.dark .card {
-  border-color: var(--color-dark-20);
+.text-contrast-80 {
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.text-contrast-60 {
+  color: var(--color-text);
+  opacity: 0.6;
 }
 
 /* Utilities personalizadas */
@@ -226,14 +207,14 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Animações */
+/* Animações suaves */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-6px); }
 }
 
 .animate-float {
-  animation: float 5s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
 /* Utilitários de performance */
@@ -258,15 +239,15 @@ body {
 /* Melhorar responsividade em telas pequenas */
 @media (max-width: 640px) {
   .section-title {
-    @apply text-2xl;
+    @apply text-xl md:text-2xl;
   }
-  
+
   .section-subtitle {
-    @apply text-base;
+    @apply text-sm;
   }
-  
+
   .btn {
-    @apply text-sm py-2.5;
+    @apply text-sm py-2;
   }
 }
 
@@ -278,4 +259,13 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Ajustes específicos para o modo escuro */
+.dark .bg-white {
+  background-color: var(--color-card-bg);
+}
+
+.dark .text-white {
+  color: var(--color-text-light);
 }

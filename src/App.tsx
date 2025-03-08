@@ -4,8 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-
-// Componentes principais
+// Componentes principais que carregam imediatamente
 import Header from './components/Header';
 import Hero from './components/Hero';
 import LoadingScreen from './components/LoadingScreen';
@@ -16,25 +15,22 @@ const Benefits = lazy(() => import('./components/Benefits'));
 const Portfolio = lazy(() => import('./components/Portfolio'));
 const Testimonials = lazy(() => import('./components/Testimonials'));
 const Contact = lazy(() => import('./components/Contact'));
-const Blog = lazy(() => import('./components/Blog'));
-const Projects = lazy(() => import('./components/Projects'));
-const Footer = lazy(() => import('./components/Footer'));
 const ServiceMap = lazy(() => import('./components/ServiceMap'));
+const Footer = lazy(() => import('./components/Footer'));
 
 // Registra os plugins GSAP
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-// Componente de fallback para carregamento lazy
+// Componente de fallback simples e elegante para carregamento lazy
 const SectionLoader = () => (
-  <div className="h-64 flex items-center justify-center bg-[var(--color-neutral)]/5">
-    <div className="animate-spin h-12 w-12 border-4 border-[var(--color-accent)] border-t-transparent rounded-full"></div>
+  <div className="h-60 flex items-center justify-center">
+    <div className="w-12 h-12 rounded-full border-2 border-[var(--color-accent)] border-t-transparent animate-spin"></div>
   </div>
 );
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState('light');
-  // const [showScrollTop, setShowScrollTop] = useState(false);
   
   // Detecta preferência de tema do sistema
   const detectSystemTheme = useCallback(() => {
@@ -49,11 +45,11 @@ function App() {
     document.documentElement.setAttribute('data-theme', newTheme);
   }, [theme]);
   
-  // Efeito para controlar a tela de carregamento
+  // Efeito para controlar a tela de carregamento - timing reduzido para melhor UX
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 3000); // Reduzido para melhorar UX
+    }, 2500);
     
     return () => clearTimeout(timer);
   }, []);
@@ -77,33 +73,23 @@ function App() {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [detectSystemTheme]);
-
-  // Botão de voltar ao topo
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setShowScrollTop(window.scrollY > 500);
-  //   };
-    
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, []);
   
   // Inicializa animações com ScrollTrigger
   useEffect(() => {
     if (!loading) {
       const ctx = gsap.context(() => {
-        // Animar as seções quando entrarem no viewport
-        document.querySelectorAll('.animate-section').forEach((section) => {
+        // Animar elementos quando entrarem no viewport
+        document.querySelectorAll('.animate-on-scroll').forEach((section) => {
           gsap.fromTo(
             section,
-            { opacity: 0, y: 30 },
+            { opacity: 0, y: 20 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.7,
+              duration: 0.6,
               scrollTrigger: {
                 trigger: section,
-                start: 'top 90%',
+                start: 'top 85%',
                 once: true,
               },
             }
@@ -117,14 +103,6 @@ function App() {
       };
     }
   }, [loading]);
-
-  // const scrollToTop = useCallback(() => {
-  //   gsap.to(window, {
-  //     duration: 1,
-  //     scrollTo: { y: 0, autoKill: true },
-  //     ease: 'power2.inOut'
-  //   });
-  // }, []);
 
   return (
     <AnimatePresence mode="wait">
@@ -165,23 +143,11 @@ function App() {
             <Suspense fallback={<SectionLoader />}>
               <Contact />
             </Suspense>
-            
-            <Suspense fallback={<SectionLoader />}>
-              <Blog />
-            </Suspense>
-            
-            <Suspense fallback={<SectionLoader />}>
-              <Projects />
-            </Suspense>
           </main>
           
           <Suspense fallback={<div className="h-20" />}>
             <Footer />
           </Suspense>
-          
-       
-          
-       
         </motion.div>
       )}
     </AnimatePresence>

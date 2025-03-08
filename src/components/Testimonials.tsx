@@ -1,12 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const testimonials = [
-  { id: 1, name: 'Ana Silva', location: 'Jurerê', rating: 5, text: 'Serviço rápido e confiável! O Fernando resolveu um problema elétrico que outros não conseguiram identificar. Super recomendo!', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' },
-  { id: 2, name: 'Carlos Mendes', location: 'Ratones', rating: 5, text: 'Excelente profissional! Pontual, organizado e resolveu o vazamento no banheiro com muita eficiência. Meu contato fixo para reparos!', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' },
-  { id: 3, name: 'Mariana Costa', location: 'Canasvieiras', rating: 5, text: 'Contratei para montar os móveis do meu apartamento novo e fiquei muito satisfeita. Trabalho impecável e preço justo!', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' },
-  { id: 4, name: 'Roberto Almeida', location: 'Ingleses', rating: 5, text: 'Reparo urgente na pia da cozinha resolvido em menos de uma hora. Atendimento super rápido. Recomendo!', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' },
+  { 
+    id: 1, 
+    name: 'Ana Silva', 
+    location: 'Jurerê', 
+    rating: 5, 
+    text: 'Serviço rápido e confiável! O Fernando resolveu um problema elétrico que outros não conseguiram identificar. Super recomendo!', 
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' 
+  },
+  { 
+    id: 2, 
+    name: 'Carlos Mendes', 
+    location: 'Ratones', 
+    rating: 5, 
+    text: 'Excelente profissional! Pontual, organizado e resolveu o vazamento no banheiro com muita eficiência. Meu contato fixo para reparos!', 
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' 
+  },
+  { 
+    id: 3, 
+    name: 'Mariana Costa', 
+    location: 'Canasvieiras', 
+    rating: 5, 
+    text: 'Contratei para montar os móveis do meu apartamento novo e fiquei muito satisfeita. Trabalho impecável e preço justo!', 
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' 
+  },
+  { 
+    id: 4, 
+    name: 'Roberto Almeida', 
+    location: 'Ingleses', 
+    rating: 5, 
+    text: 'Reparo urgente na pia da cozinha resolvido em menos de uma hora. Atendimento super rápido. Recomendo!', 
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' 
+  },
 ];
 
 const Testimonials: React.FC = () => {
@@ -23,13 +51,36 @@ const Testimonials: React.FC = () => {
   }, [current, autoplay]);
 
   return (
-    <section id="testimonials" className="py-20 bg-[var(--color-light)] dark:bg-[var(--color-primary)]">
+    <section id="testimonials" className="py-20 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
       <div className="container">
-        <div className="animate-section text-center mb-16">
-          <h2 className="section-title text-[var(--color-text)] dark:text-[var(--color-text)]">O Que Nossos Clientes Dizem</h2>
-          <p className="section-subtitle dark:text-opacity-80 max-w-3xl mx-auto">
-            A satisfação dos nossos clientes é o nosso maior orgulho. Confira alguns depoimentos.
-          </p>
+        <div className="text-center mb-16">
+          <motion.span 
+            className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Depoimentos
+          </motion.span>
+          <motion.h2 
+            className="section-title mb-4 "
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            O Que Nossos Clientes Dizem
+          </motion.h2>
+          <motion.p 
+            className="section-subtitle dark:text-[var(--color-dark)]"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            A satisfação dos nossos clientes é o nosso maior orgulho
+          </motion.p>
         </div>
 
         <div
@@ -37,22 +88,29 @@ const Testimonials: React.FC = () => {
           onMouseEnter={() => setAutoplay(false)}
           onMouseLeave={() => setAutoplay(true)}
         >
-          <div className="absolute -top-10 -left-10 opacity-10">
-            <Quote className="h-24 w-24 text-[var(--color-accent)]" />
-          </div>
-
-          <div className="overflow-hidden relative rounded-xl bg-[var(--color-neutral)]/20 dark:bg-[var(--color-dark)]/20 p-6 md:p-10 shadow-lg">
+          <motion.div 
+            className="overflow-hidden relative rounded-xl bg-white dark:bg-[var(--color-neutral)]/5 p-8 md:p-10 shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            {/* Aspas decorativas minimalistas */}
+            <svg className="absolute top-8 left-8 w-10 h-10 text-[var(--color-accent)]/10" fill="currentColor" viewBox="0 0 32 32">
+              <path d="M9.352 27.12c-2.56 0-4.64-.832-6.24-2.496C1.52 22.967.72 20.8.72 18.137c0-2.24.544-4.48 1.632-6.72 1.088-2.24 2.4-4.16 3.936-5.76C7.824 4.065 9.584 2.72 11.568 1.632L13.872 4.8c-1.92 1.088-3.456 2.4-4.608 3.936-1.152 1.536-1.728 3.184-1.728 4.944 0 .768.16 1.376.48 1.824a39.77 39.77 0 0 0 1.44-1.44c.512-.576 1.136-1.056 1.872-1.44.736-.384 1.6-.576 2.592-.576 1.856 0 3.36.672 4.512 2.016 1.152 1.344 1.728 3.08 1.728 5.208 0 1.856-.544 3.456-1.632 4.8-1.088 1.344-2.8 2.016-5.136 2.016zm16.128 0c-2.56 0-4.64-.832-6.24-2.496-1.6-1.664-2.4-3.824-2.4-6.48 0-2.24.544-4.48 1.632-6.72 1.088-2.24 2.4-4.16 3.936-5.76 1.536-1.6 3.288-2.944 5.28-4.032L30 4.8c-1.92 1.088-3.456 2.4-4.608 3.936a10.824 10.824 0 0 0-1.728 4.944c0 .768.16 1.376.48 1.824.448-.448.896-.928 1.344-1.44.512-.576 1.136-1.056 1.872-1.44.736-.384 1.6-.576 2.592-.576 1.856 0 3.36.672 4.512 2.016 1.152 1.344 1.728 3.08 1.728 5.208 0 1.856-.544 3.456-1.632 4.8-1.088 1.344-2.8 2.016-5.136 2.016z"></path>
+            </svg>
+            
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
-                initial={{ opacity: 0, x: 100 }}
+                initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="flex flex-col md:flex-row items-center gap-8"
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="flex flex-col md:flex-row items-center gap-8 relative z-10"
               >
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[var(--color-accent)] shadow-md">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-[var(--color-accent)]/20 shadow-sm">
                     <img
                       src={testimonials[current].image}
                       alt={`Cliente ${testimonials[current].name}`}
@@ -61,29 +119,29 @@ const Testimonials: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-grow text-center md:text-left">
-                  <div className="flex justify-center md:justify-start mb-2">
+                  <div className="flex justify-center md:justify-start mb-3">
                     {[...Array(testimonials[current].rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-[var(--color-accent)] text-[var(--color-accent)]" />
+                      <Star key={i} className="h-4 w-4 fill-[var(--color-accent)] text-[var(--color-accent)]" />
                     ))}
                   </div>
-                  <p className="text-lg mb-4 italic text-[var(--color-text)] dark:text-[var(--color-text)]/90 leading-relaxed">"{testimonials[current].text}"</p>
+                  <p className="text-lg mb-4 text-[var(--color-dark)] dark:text-[var(--color-text)] leading-relaxed">"{testimonials[current].text}"</p>
                   <div>
-                    <h4 className="font-semibold text-xl text-[var(--color-text)] dark:text-[var(--color-text)]">{testimonials[current].name}</h4>
+                    <h4 className="font-medium text-xl text-[var(--color-dark)] dark:text-[var(--color-text)]">{testimonials[current].name}</h4>
                     <p className="text-[var(--color-accent)]">{testimonials[current].location}</p>
                   </div>
                 </div>
               </motion.div>
             </AnimatePresence>
 
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between items-center mt-10">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={prev}
-                className="p-3 rounded-full bg-[var(--color-neutral)]/20 dark:bg-[var(--color-dark)]/20 hover:bg-[var(--color-accent)]/30 transition-colors"
+                className="p-2 rounded-full bg-[var(--color-neutral)]/10 dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/10 transition-colors"
                 aria-label="Depoimento anterior"
               >
-                <ChevronLeft className="h-6 w-6 text-[var(--color-accent)]" />
+                <ChevronLeft className="h-5 w-5 text-[var(--color-accent)]" />
               </motion.button>
 
               <div className="flex gap-2">
@@ -92,7 +150,11 @@ const Testimonials: React.FC = () => {
                     key={index}
                     onClick={() => setCurrent(index)}
                     whileHover={{ scale: 1.1 }}
-                    className={`w-3 h-3 rounded-full transition-all ${current === index ? 'bg-[var(--color-accent)] w-6' : 'bg-[var(--color-accent)]/30'}`}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      current === index 
+                        ? 'bg-[var(--color-accent)] w-6' 
+                        : 'bg-[var(--color-accent)]/30'
+                    }`}
                     aria-label={`Ir para depoimento ${index + 1}`}
                   />
                 ))}
@@ -102,13 +164,13 @@ const Testimonials: React.FC = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={next}
-                className="p-3 rounded-full bg-[var(--color-neutral)]/20 dark:bg-[var(--color-dark)]/20 hover:bg-[var(--color-accent)]/30 transition-colors"
+                className="p-2 rounded-full bg-[var(--color-neutral)]/10 dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/10 transition-colors"
                 aria-label="Próximo depoimento"
               >
-                <ChevronRight className="h-6 w-6 text-[var(--color-accent)]" />
+                <ChevronRight className="h-5 w-5 text-[var(--color-accent)]" />
               </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,59 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
-import { Wrench, Sparkles } from 'lucide-react';
+import { Wrench } from 'lucide-react';
 
 const LoadingScreen: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Impede scroll durante a animação
+    // Impedir scroll durante a animação
     document.documentElement.classList.add('no-scroll');
     
-    // Referencias aos elementos DOM
+    // Referências aos elementos DOM
     const container = containerRef.current;
-    const wrapper = wrapperRef.current;
-    const textContainer = textRef.current;
+    const logo = logoRef.current;
     
-    if (!container || !wrapper || !textContainer) return;
+    if (!container || !logo) return;
     
-    // Cria o contexto para GSAP trabalhar com ScrollTrigger
+    // Timeline com contexto GSAP
     const ctx = gsap.context(() => {
-      // Configuração inicial - esconde elementos
-      gsap.set('.loader-particle', { 
-        scale: 0,
-        opacity: 0,
-        rotate: 'random(-180, 180)'
-      });
-      
-      gsap.set('.brand-icon', { 
-        opacity: 0,
-        scale: 0,
-        rotate: -45
-      });
-      
-      gsap.set('.brand-text-part', { 
-        opacity: 0,
-        y: 100
-      });
-      
-      gsap.set('.underline-loading', { 
-        scaleX: 0
-      });
-      
-      gsap.set('.loader-subtitle', { 
-        opacity: 0,
-        y: 20
-      });
-      
-      gsap.set('.loading-progress', { 
-        scaleX: 0,
-        transformOrigin: 'left'
-      });
-      
-      // Cria a timeline de animação
+      // Timeline principal para a animação de loading
       const tl = gsap.timeline({
         onComplete: () => {
           // Timeline para remover a tela de loading
@@ -63,82 +29,51 @@ const LoadingScreen: React.FC = () => {
             }
           });
           
-          // Anima os elementos para saírem
+          // Anima a saída da tela de loading
           exitTl
             .to('.loading-container', { 
               opacity: 0,
               duration: 0.8,
               ease: 'power2.inOut'
             })
-            .to('.loading-wrapper', {
-              y: -100,
-              duration: 0.8,
+            .to('.loading-content', {
+              y: -40,
+              duration: 0.6,
               ease: 'power3.in'
             }, '<');
         }
       });
       
-      // Cria efeito de espalhamento de partículas
-      tl.to('.loader-particle', {
-        scale: 1,
-        opacity: 0.8,
-        stagger: 0.03,
-        duration: 0.4,
-        rotate: 'random(-20, 20)',
-        ease: 'back.out(2)'
-      });
+      // Configuração inicial da animação
+      gsap.set('.logo-icon', { scale: 0, opacity: 0 });
+      gsap.set('.logo-text', { y: 30, opacity: 0 });
+      gsap.set('.loading-bar-progress', { scaleX: 0, transformOrigin: 'left' });
+      gsap.set('.loading-message', { opacity: 0, y: 20 });
       
-      // Anima o ícone principal
-      tl.to('.brand-icon', {
-        opacity: 1, 
+      // Anima o logo e a barra de progresso
+      tl.to('.logo-icon', {
         scale: 1,
-        rotate: 0,
+        opacity: 1,
         duration: 0.8,
-        ease: 'elastic.out(1, 0.5)'
-      }, '-=0.2');
-      
-      // Anima o texto da marca
-      tl.to('.brand-text-part', {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.7,
         ease: 'back.out(1.7)'
-      }, '-=0.5');
-      
-      // Anima a linha abaixo do texto
-      tl.to('.underline-loading', {
-        scaleX: 1,
-        duration: 0.6,
-        ease: 'power2.inOut'
-      }, '-=0.4');
-      
-      // Anima o subtítulo
-      tl.to('.loader-subtitle', {
-        opacity: 1,
+      })
+      .to('.logo-text', {
         y: 0,
+        opacity: 1,
         duration: 0.6,
         ease: 'power2.out'
-      }, '-=0.3');
-      
-      // Anima a barra de progresso
-      tl.to('.loading-progress', {
+      }, '-=0.4')
+      .to('.loading-message', {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: 'power2.out'
+      }, '-=0.2')
+      .to('.loading-bar-progress', {
         scaleX: 1,
         duration: 1.8,
         ease: 'power1.inOut'
-      }, '-=0.2');
-      
-      // Cria movimento de partículas flutuantes
-      gsap.to('.loader-particle', {
-        x: 'random(-30, 30)',
-        y: 'random(-30, 30)',
-        rotation: 'random(-40, 40)',
-        duration: 'random(2, 4)',
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        stagger: 0.1
-      });
+      }, '-=0.3');
     }, container);
     
     // Cleanup
@@ -148,73 +83,52 @@ const LoadingScreen: React.FC = () => {
     };
   }, []);
   
-  // Função para criar partículas
-  const renderParticles = () => {
-    const particles = [];
-    const colors = ['#40C4FF', '#F39C12', '#FFFFFF'];
-    
-    for (let i = 0; i < 20; i++) {
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = Math.random() * 10 + 5;
-      const randomPosition = {
-        top: `${Math.random() * 80 + 10}%`,
-        left: `${Math.random() * 80 + 10}%`,
-      };
-      
-      particles.push(
-        <div 
-          key={i}
-          className="loader-particle absolute rounded-full"
-          style={{
-            backgroundColor: color,
-            width: size,
-            height: size,
-            top: randomPosition.top,
-            left: randomPosition.left,
-            filter: 'blur(1px)'
-          }}
-        />
-      );
-    }
-    return particles;
-  };
-  
   return (
     <motion.div
       ref={containerRef}
-      className="loading-container fixed inset-0 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary)]/90 flex items-center justify-center z-50 overflow-hidden"
+      className="loading-container fixed inset-0 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary)]/95 flex items-center justify-center z-50 overflow-hidden"
     >
-      {/* Partículas decorativas */}
-      {renderParticles()}
-      
-      {/* Conteúdo central */}
-      <div ref={wrapperRef} className="loading-wrapper relative z-10 flex flex-col items-center">
-        <div ref={textRef} className="flex flex-col items-center">
-          <div className="flex items-center gap-4 mb-6">
-            <Wrench className="brand-icon h-16 w-16 text-[var(--color-accent)]" />
-            <div className="flex flex-col">
-              <h1 className="brand-text-part text-5xl md:text-6xl font-bold text-[var(--color-paralel)] font-poppins">
-                FH
-              </h1>
-              <h1 className="brand-text-part text-5xl md:text-6xl font-bold text-[var(--color-accent)] font-poppins">
-                Resolve
-              </h1>
-            </div>
+      <div 
+        ref={logoRef} 
+        className="loading-content relative z-10 flex flex-col items-center"
+      >
+        <div className="mb-8 flex flex-col items-center">
+          <div className="logo-icon bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10 mb-6">
+            <Wrench className="h-12 w-12 text-[var(--color-accent)]" />
           </div>
           
-          <div className="underline-loading h-1 w-60 bg-[var(--color-secondary)] rounded-full mb-6 transform origin-left"></div>
-          
-          <div className="flex items-center gap-2 mb-10">
-            <Sparkles className="h-5 w-5 text-[var(--color-secondary)]" />
-            <p className="loader-subtitle text-lg md:text-xl text-white font-inter">
-              Soluções para sua casa em Florianópolis
-            </p>
-          </div>
-          
-          <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="loading-progress h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-secondary)]"></div>
+          <div className="logo-text flex flex-col items-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-white font-jakarta">
+              FH<span className="text-[var(--color-accent)]">Resolve</span>
+            </h1>
           </div>
         </div>
+        
+        <div className="loading-message text-white/80 text-sm font-medium mb-8">
+          Carregando serviços de manutenção...
+        </div>
+        
+        <div className="loading-bar w-64 h-1.5 bg-white/10 rounded-full overflow-hidden">
+          <div className="loading-bar-progress h-full bg-[var(--color-accent)]"></div>
+        </div>
+      </div>
+
+      {/* Elementos decorativos */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[...Array(10)].map((_, i) => (
+          <div 
+            key={i}
+            className="absolute rounded-full bg-[var(--color-accent)]/5"
+            style={{
+              width: `${Math.random() * 200 + 50}px`,
+              height: `${Math.random() * 200 + 50}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animation: 'pulse 10s infinite'
+            }}
+          />
+        ))}
       </div>
     </motion.div>
   );

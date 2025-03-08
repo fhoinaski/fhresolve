@@ -1,76 +1,228 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { Filter } from 'lucide-react';
 
 const portfolioItems = [
-  { id: 1, title: 'Instalação Elétrica', description: 'Tomadas e interruptores em Jurerê.', image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'elétrica' },
-  { id: 2, title: 'Reparo Hidráulico', description: 'Conserto de vazamento em Ratones.', image: 'https://images.unsplash.com/photo-1585704032915-c3400305e979?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'hidráulica' },
-  // Outros itens mantidos
+  { 
+    id: 1, 
+    title: 'Instalação Elétrica', 
+    description: 'Tomadas e interruptores em Jurerê.', 
+    image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'elétrica' 
+  },
+  { 
+    id: 2, 
+    title: 'Reparo Hidráulico', 
+    description: 'Conserto de vazamento em Ratones.', 
+    image: 'https://images.unsplash.com/photo-1585704032915-c3400305e979?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'hidráulica' 
+  },
+  { 
+    id: 3, 
+    title: 'Montagem de Móveis', 
+    description: 'Armários e estantes em Canasvieiras.', 
+    image: 'https://images.unsplash.com/photo-1631889993959-41b4e9c6e3c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'montagem' 
+  },
+  { 
+    id: 4, 
+    title: 'Pintura Residencial', 
+    description: 'Renovação de sala em Ingleses.', 
+    image: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'pintura' 
+  },
+  { 
+    id: 5, 
+    title: 'Troca de Chuveiro', 
+    description: 'Instalação em Santo Antônio.', 
+    image: 'https://images.unsplash.com/photo-1575033112078-1f71675e594f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'elétrica' 
+  },
+  { 
+    id: 6, 
+    title: 'Reparos em Drywall', 
+    description: 'Correção em parede de Jurerê.', 
+    image: 'https://images.unsplash.com/photo-1534172472807-65768f7056c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+    category: 'montagem' 
+  }
 ];
 
 const Portfolio: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [filter, setFilter] = useState('todos');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const filteredItems = filter === 'todos' ? portfolioItems : portfolioItems.filter((item) => item.category === filter);
+  const filteredItems = filter === 'todos' 
+    ? portfolioItems 
+    : portfolioItems.filter((item) => item.category === filter);
+  
+  const categories = ['todos', 'elétrica', 'hidráulica', 'montagem', 'pintura'];
 
   return (
-    <section id="portfolio" className="py-16 md:py-24 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
+    <section id="portfolio" className="py-20 bg-white dark:bg-[var(--color-primary)]">
       <div className="container">
-        <motion.div className="text-center mb-12" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-          <h2 className="section-title">Portfólio</h2>
-          <p className="section-subtitle">Nossos trabalhos recentes</p>
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {['todos', 'elétrica', 'hidráulica', 'montagem', 'pintura'].map((category) => (
+        <div className="text-center mb-16">
+          <motion.span 
+            className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Nossos Trabalhos
+          </motion.span>
+          <motion.h2 
+            className="section-title mb-4 text-[var(--color-dark)]"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Portfólio
+          </motion.h2>
+          <motion.p 
+            className="section-subtitle text-[var(--color-dark)]"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Confira alguns de nossos trabalhos recentes
+          </motion.p>
+          
+          {/* Filtro de categorias responsivo */}
+          <div className="relative mb-12">
+            <div className="md:hidden">
               <motion.button
-                key={category}
-                onClick={() => setFilter(category)}
-                className={`px-4 py-2 rounded-full ${filter === category ? 'bg-[var(--color-accent)] text-white' : 'bg-[var(--color-light)] text-[var(--color-text)]'}`}
-                whileHover={{ scale: 1.05 }}
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="flex items-center justify-center gap-2 mx-auto px-4 py-2 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-medium"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
+                <Filter className="h-4 w-4" />
+                <span>Filtrar: {filter.charAt(0).toUpperCase() + filter.slice(1)}</span>
               </motion.button>
-            ))}
+              
+              <AnimatePresence>
+                {isFilterOpen && (
+                  <motion.div 
+                    className="absolute z-10 mt-2 p-2 w-48 left-1/2 transform -translate-x-1/2 bg-[var(--color-card-bg)] rounded-lg shadow-lg border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {categories.map((category) => (
+                      <motion.button
+                        key={category}
+                        onClick={() => {
+                          setFilter(category);
+                          setIsFilterOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 rounded-md text-sm ${
+                          filter === category 
+                            ? 'bg-[var(--color-accent)] text-white font-medium' 
+                            : 'hover:bg-[var(--color-accent)]/10 card-text'
+                        }`}
+                        whileHover={{ x: 3 }}
+                      >
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </motion.button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            
+            <div className="hidden md:flex flex-wrap justify-center gap-3">
+              {categories.map((category) => (
+                <motion.button
+                  key={category}
+                  onClick={() => setFilter(category)}
+                  className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                    filter === category 
+                      ? 'bg-[var(--color-accent)] text-white font-medium' 
+                      : 'bg-[var(--color-gray)] dark:bg-[var(--color-neutral)]/10 text-[var(--color-text)] dark:text-[var(--color-text)] hover:bg-[var(--color-neutral)]/20'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </motion.button>
+              ))}
+            </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" layout>
-          <AnimatePresence>
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" 
+          layout
+        >
+          <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <motion.div
                 key={item.id}
-                className="card overflow-hidden cursor-pointer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.05 }}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                className="bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 cursor-pointer group"
                 onClick={() => setSelectedImage(item.image)}
+                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}
               >
-                <img src={item.image} alt={item.title} className="w-full h-48 object-cover" loading="lazy" />
+                <div className="relative overflow-hidden aspect-[4/3]">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                    loading="lazy" 
+                  />
+                  <div className="absolute inset-0 bg-[var(--color-primary)]/20 group-hover:opacity-0 transition-opacity duration-300"></div>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 p-2">
+                    <span className="inline-block px-2 py-1 bg-[var(--color-accent)]/80 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+                      {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+                    </span>
+                  </div>
+                </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-[var(--color-text)]/80 dark:text-[var(--color-paralel)]">{item.description}</p>
+                  <h3 className="text-lg font-medium mb-1 card-text">{item.title}</h3>
+                  <p className="text-sm card-text-secondary">{item.description}</p>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
+        {/* Visualizador de imagem em tela cheia */}
         <AnimatePresence>
           {selectedImage && (
             <motion.div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedImage(null)}
             >
+              <motion.button 
+                className="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white backdrop-blur-sm"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setSelectedImage(null)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </motion.button>
               <motion.img
                 src={selectedImage}
                 alt="Imagem ampliada"
-                className="max-w-[90%] max-h-[90vh] rounded-lg shadow-lg"
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="max-w-[90%] max-h-[90vh] rounded-lg shadow-2xl"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                onClick={(e) => e.stopPropagation()}
               />
             </motion.div>
           )}

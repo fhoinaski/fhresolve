@@ -7,70 +7,135 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const linkVariants = {
-    hover: { x: 5, color: 'var(--color-accent)', transition: { duration: 0.3 } },
+    hover: { x: 5, transition: { duration: 0.2 } },
   };
 
   return (
-    <footer className="bg-[var(--color-primary)] dark:bg-[var(--color-dark)] text-[var(--color-paralel)] relative">
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-        }}
-      />
-      <div className="container py-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+    <footer className="bg-[var(--color-primary)] text-[var(--color-text)] relative">
+      {/* Fundo decorativo suave */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-gradient-to-br from-[var(--color-accent)]/20 via-transparent to-transparent" />
+      
+      <div className="container py-16 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          {/* Logo e descrição */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="flex items-center gap-2 mb-4">
-              <Wrench className="h-8 w-8 text-[var(--color-accent)]" />
-              <h3 className="text-2xl font-semibold">FH Resolve</h3>
+              <Wrench className="h-6 w-6 text-[var(--color-accent)]" />
+              <h3 className="text-xl font-bold text-white">FH Resolve</h3>
             </div>
-            <p className="text-[var(--color-light)]/70 mb-6">
-              Serviços de manutenção residencial em Florianópolis.
+            <p className="text-white/70 mb-6 text-sm">
+              Serviços profissionais de manutenção residencial em Florianópolis.
             </p>
-            <div className="flex gap-4">
-              {[<Instagram />, <Facebook />, <Linkedin />].map((icon, index) => (
+            <div className="flex gap-3">
+              {[
+                { icon: <Instagram size={18} />, href: '#' },
+                { icon: <Facebook size={18} />, href: '#' },
+                { icon: <Linkedin size={18} />, href: '#' }
+              ].map((social, index) => (
                 <motion.a
                   key={index}
-                  href="#"
-                  whileHover={{ scale: 1.2, rotate: 15 }}
-                  className="h-12 w-12 rounded-full bg-[var(--color-neutral)]/20 flex items-center justify-center"
+                  href={social.href}
+                  whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+                  className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center text-white/80 hover:text-white transition-colors border border-white/10"
+                  aria-label={`Link para ${social.icon.type.name}`}
                 >
-                  {icon}
+                  {social.icon}
                 </motion.a>
               ))}
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-            <h3 className="text-xl font-semibold mb-6">Links Rápidos</h3>
+          {/* Links rápidos */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <h3 className="text-base font-medium mb-5 text-white">Links Rápidos</h3>
             <ul className="space-y-3">
-              {['Início', 'Sobre', 'Serviços', 'Contato'].map((item) => (
-                <motion.li key={item} whileHover="hover" variants={linkVariants}>
-                  <a href={`#${item.toLowerCase()}`} className="flex items-center gap-2">
-                    <span className="h-1 w-1 bg-[var(--color-accent)] rounded-full"></span>
-                    {item}
+              {[
+                { name: 'Início', href: '#hero' },
+                { name: 'Sobre', href: '#about' },
+                { name: 'Serviços', href: '#benefits' },
+                { name: 'Portfólio', href: '#portfolio' },
+                { name: 'Contato', href: '#contact' }
+              ].map((item) => (
+                <motion.li key={item.name} whileHover="hover">
+                  <a 
+                    href={item.href} 
+                    className="flex items-center text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    <motion.span variants={linkVariants} className="flex items-center">
+                      <span className="h-1 w-1 bg-[var(--color-accent)] rounded-full mr-2"></span>
+                      {item.name}
+                    </motion.span>
                   </a>
                 </motion.li>
               ))}
             </ul>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-            <h3 className="text-xl font-semibold mb-6">Contato</h3>
+          {/* Serviços */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <h3 className="text-base font-medium mb-5 text-white">Serviços</h3>
+            <ul className="space-y-3">
+              {[
+                'Reparos Elétricos',
+                'Serviços Hidráulicos',
+                'Montagem de Móveis',
+                'Pinturas e Acabamentos',
+                'Reparos Gerais'
+              ].map((service) => (
+                <motion.li key={service} whileHover="hover">
+                  <a 
+                    href="#benefits" 
+                    className="flex items-center text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    <motion.span variants={linkVariants} className="flex items-center">
+                      <span className="h-1 w-1 bg-[var(--color-accent)] rounded-full mr-2"></span>
+                      {service}
+                    </motion.span>
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Contato */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <h3 className="text-base font-medium mb-5 text-white">Contato</h3>
             <ul className="space-y-4">
               {[
-                { icon: <Phone />, value: '+55 48 99191-9791', link: 'tel:+5548991919791' },
-                { icon: <MessageCircle />, value: 'WhatsApp', link: 'https://wa.me/5548991919791' },
-                { icon: <Mail />, value: 'contato@fhresolve.com.br', link: 'mailto:contato@fhresolve.com.br' },
-                { icon: <MapPin />, value: 'Ratones, Florianópolis' },
+                { icon: <Phone size={16} />, value: '+55 48 99191-9791', href: 'tel:+5548991919791' },
+                { icon: <MessageCircle size={16} />, value: 'WhatsApp', href: 'https://wa.me/5548991919791' },
+                { icon: <Mail size={16} />, value: 'contato@fhresolve.com.br', href: 'mailto:contato@fhresolve.com.br' },
+                { icon: <MapPin size={16} />, value: 'Ratones, Florianópolis' },
               ].map((item, index) => (
-                <motion.li key={index} whileHover="hover" variants={linkVariants}>
-                  <a href={item.link} className="flex items-center gap-3">
-                    {item.icon}
-                    <span>{item.value}</span>
+                <motion.li key={index} whileHover="hover">
+                  <a 
+                    href={item.href} 
+                    className="flex items-center gap-3 text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    <motion.span variants={linkVariants} className="flex items-center gap-3">
+                      <span className="text-[var(--color-accent)]">{item.icon}</span>
+                      {item.value}
+                    </motion.span>
                   </a>
                 </motion.li>
               ))}
@@ -78,14 +143,16 @@ const Footer: React.FC = () => {
           </motion.div>
         </div>
 
-        <div className="py-6 border-t border-[var(--color-neutral)]/20 flex justify-between items-center">
-          <p className="text-sm">© {currentYear} FH Resolve</p>
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-white/50">© {currentYear} FH Resolve. Todos os direitos reservados.</p>
+          
           <motion.button
             onClick={scrollToTop}
-            whileHover={{ scale: 1.2, rotate: 360 }}
-            className="h-12 w-12 rounded-full bg-[var(--color-accent)] text-[var(--color-dark)] flex items-center justify-center"
+            whileHover={{ scale: 1.1, y: -3 }}
+            className="h-10 w-10 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center shadow-md"
+            aria-label="Voltar ao topo"
           >
-            <ArrowUp className="h-6 w-6" />
+            <ArrowUp className="h-5 w-5" />
           </motion.button>
         </div>
       </div>
