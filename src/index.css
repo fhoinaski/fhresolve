@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definindo variáveis de tema */
 :root {
   /* Tema Claro */
   --color-primary: #1E2A44; /* Azul escuro */
@@ -15,6 +15,12 @@
   --color-gray: #E0E7FF; /* Cinza azulado */
   --color-paralel: #E0E7FF; /* Texto claro */
   --color-highlight: #FFD700; /* Amarelo destaque */
+  
+  /* RGB para animações */
+  --color-accent-rgb: 64, 196, 255;
+  --color-secondary-rgb: 243, 156, 18;
+  
+  /* Tamanhos de fonte */
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
@@ -25,6 +31,30 @@
   /* Adicionando cores com opacidade pré-definida */
   --color-neutral-20: rgba(216, 226, 235, 0.2); /* D8E2EB com 20% de opacidade */
   --color-dark-20: rgba(7, 16, 19, 0.2); /* 071013 com 20% de opacidade */
+  
+  /* Variáveis de espaçamento */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Variáveis de borda */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Variáveis de transição */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Variáveis de sombra */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
@@ -45,11 +75,25 @@
   --color-dark-20: rgba(224, 231, 255, 0.2); /* E0E7FF com 20% de opacidade */
 }
 
+/* Definindo fontes */
+.font-oswald {
+  font-family: 'Oswald', sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
 /* Estilos globais */
 html {
   scroll-behavior: smooth;
   height: 100%;
   overflow-y: auto;
+  scroll-padding-top: 80px; /* Para evitar que os âncoras fiquem atrás do header fixo */
 }
 
 html.no-scroll {
@@ -65,6 +109,38 @@ body {
   overflow-y: auto;
 }
 
+/* Melhorando as transições para suavidade */
+*, *::before, *::after {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Estilização de scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-20);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Melhorar acessibilidade de foco */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
 /* Componentes personalizados */
 @layer components {
   .container {
@@ -72,37 +148,27 @@ body {
   }
 
   .btn {
-    @apply px-6 py-3 font-medium rounded-lg text-base transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-accent)];
+    @apply px-6 py-3 font-medium rounded-lg text-base transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
 
   .btn-primary {
     @apply bg-[var(--color-accent)] text-[var(--color-dark)] hover:bg-opacity-90 dark:text-[var(--color-primary)];
   }
 
-  .btn-primary::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.6s ease, height 0.6s ease;
-  }
-
-  .btn-primary:hover::after {
-    width: 200%;
-    height: 200%;
+  .btn-secondary {
+    @apply bg-[var(--color-secondary)] text-[var(--color-dark)] hover:bg-opacity-90 dark:text-[var(--color-primary)];
   }
 
   .btn-outline {
     @apply border-2 border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-dark)] dark:hover:text-[var(--color-primary)];
   }
 
+  .btn-ghost {
+    @apply bg-transparent text-[var(--color-text)] hover:bg-opacity-10;
+  }
+
   .section-title {
-    @apply text-3xl md:text-4xl font-bold mb-6 text-[var(--color-primary)] dark:text-[var(--color-text)] font-poppins;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-[var(--color-primary)] dark:text-[var(--color-text)] font-poppins;
   }
 
   .section-subtitle {
@@ -112,36 +178,71 @@ body {
   .card {
     @apply bg-[var(--color-light)] dark:bg-[var(--color-neutral)] p-6 rounded-xl shadow-md transition-all duration-300 border;
   }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 dark:bg-opacity-50 transition-all;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply bg-opacity-20 text-[var(--color-accent)];
+  }
+  
+  .badge-secondary {
+    @apply bg-opacity-20 text-[var(--color-secondary)];
+  }
 }
 
-/* Estilo adicional para os cards usando variáveis CSS diretamente */
+/* Estilos diretos para os cards */
 .card {
   border-color: var(--color-neutral-20);
 }
 
 .dark .card {
   border-color: var(--color-dark-20);
-  background-color: var(--color-neutral); /* Garante fundo escuro nos cards no modo dark */
 }
 
-/* Estilos específicos */
-.leaflet-container {
-  height: 400px;
-  width: 100%;
-  border-radius: 0.5rem;
+/* Utilities personalizadas */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(45deg, var(--color-accent), var(--color-secondary));
 }
 
-@media (min-width: 768px) {
-  section {
-    @apply py-28;
-  }
+.backdrop-blur {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Animações */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Utilitários de performance */
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Considerar a acessibilidade */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -150,11 +251,31 @@ body {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  border: 0;
+  white-space: nowrap;
+  border-width: 0;
 }
 
-/* Keyframes para animação de loading */
-@keyframes loading {
-  from { width: 0%; }
-  to { width: 100%; }
+/* Melhorar responsividade em telas pequenas */
+@media (max-width: 640px) {
+  .section-title {
+    @apply text-2xl;
+  }
+  
+  .section-subtitle {
+    @apply text-base;
+  }
+  
+  .btn {
+    @apply text-sm py-2.5;
+  }
+}
+
+/* Otimizações de acessibilidade para usuários com modo de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

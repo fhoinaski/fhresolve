@@ -1,90 +1,190 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useCallback, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+
+// Componentes principais
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
-import Benefits from './components/Benefits';
-import Portfolio from './components/Portfolio';
-import Testimonials from './components/Testimonials';
-const ServiceMap = React.lazy(() => import('./components/ServiceMap'));
-import Contact from './components/Contact';
-import Blog from './components/Blog';
-import Projects from './components/Projects';
-import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 
-// Registra o plugin ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
+// Componentes com carregamento lazy
+const About = lazy(() => import('./components/About'));
+const Benefits = lazy(() => import('./components/Benefits'));
+const Portfolio = lazy(() => import('./components/Portfolio'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const Contact = lazy(() => import('./components/Contact'));
+const Blog = lazy(() => import('./components/Blog'));
+const Projects = lazy(() => import('./components/Projects'));
+const Footer = lazy(() => import('./components/Footer'));
+const ServiceMap = lazy(() => import('./components/ServiceMap'));
+
+// Registra os plugins GSAP
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// Componente de fallback para carregamento lazy
+const SectionLoader = () => (
+  <div className="h-64 flex items-center justify-center bg-[var(--color-neutral)]/5">
+    <div className="animate-spin h-12 w-12 border-4 border-[var(--color-accent)] border-t-transparent rounded-full"></div>
+  </div>
+);
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState('light');
-
+  // const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  // Detecta preferência de tema do sistema
+  const detectSystemTheme = useCallback(() => {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }, []);
+  
+  // Função para alternar tema
+  const toggleTheme = useCallback(() => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  }, [theme]);
+  
   // Efeito para controlar a tela de carregamento
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 3000); // Reduzido para melhorar UX
+    
     return () => clearTimeout(timer);
   }, []);
 
- // Efeito para controlar o tema usando data-theme
- useEffect(() => {
-  document.documentElement.setAttribute('data-theme', theme);
-}, [theme]);
+  // Inicializa o tema
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || detectSystemTheme();
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Ouvir alterações nas preferências do sistema
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (!localStorage.getItem('theme')) {
+        const newTheme = detectSystemTheme();
+        setTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [detectSystemTheme]);
 
-  // Efeito para configurar as animações quando o carregamento terminar
+  // Botão de voltar ao topo
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setShowScrollTop(window.scrollY > 500);
+  //   };
+    
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
+  
+  // Inicializa animações com ScrollTrigger
   useEffect(() => {
     if (!loading) {
-      gsap.utils.toArray('.animate-section').forEach((section: any) => {
-        gsap.fromTo(
-          section,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 85%',
-              end: 'bottom 15%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+      const ctx = gsap.context(() => {
+        // Animar as seções quando entrarem no viewport
+        document.querySelectorAll('.animate-section').forEach((section) => {
+          gsap.fromTo(
+            section,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 90%',
+                once: true,
+              },
+            }
+          );
+        });
       });
+      
+      return () => {
+        ctx.revert();
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      };
     }
   }, [loading]);
 
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+  // const scrollToTop = useCallback(() => {
+  //   gsap.to(window, {
+  //     duration: 1,
+  //     scrollTo: { y: 0, autoKill: true },
+  //     ease: 'power2.inOut'
+  //   });
+  // }, []);
 
   return (
-    <>
+    <AnimatePresence mode="wait">
       {loading ? (
-        <LoadingScreen />
+        <LoadingScreen key="loader" />
       ) : (
-        <div className="flex flex-col min-h-screen">
+        <motion.div 
+          key="content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col min-h-screen"
+        >
           <Header theme={theme} toggleTheme={toggleTheme} />
-          <main className="flex-grow pt-20">
+          <main className="flex-grow">
             <Hero />
-            <About />
-            <Benefits />
-            <Portfolio />
-            <Testimonials />
-            <Suspense fallback={<div className="h-[400px] bg-[var(--color-neutral)] animate-pulse" />}>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <About />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Benefits />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Portfolio />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Testimonials />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
               <ServiceMap />
             </Suspense>
-            <Contact />
-            <Blog />
-            <Projects />
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Contact />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Blog />
+            </Suspense>
+            
+            <Suspense fallback={<SectionLoader />}>
+              <Projects />
+            </Suspense>
           </main>
-          <Footer />
-        </div>
+          
+          <Suspense fallback={<div className="h-20" />}>
+            <Footer />
+          </Suspense>
+          
+       
+          
+       
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }
 

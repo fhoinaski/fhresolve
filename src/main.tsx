@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'; // Importação ajustada para incluir React
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 import './index.css';
 
 // Renderiza o aplicativo com StrictMode apenas em desenvolvimento
