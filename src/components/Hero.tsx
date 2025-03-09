@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
@@ -48,6 +48,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, desc, index }) =
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const services = [
     { icon: <Wrench size={22} />, title: 'Reparos Elétricos', desc: 'Instalações e consertos profissionais com garantia.' },
@@ -55,9 +56,26 @@ const Hero: React.FC = () => {
     { icon: <ShieldCheck size={22} />, title: 'Qualidade Garantida', desc: 'Atendimento rápido e serviço de excelência.' },
   ];
 
+  // Verificar se é dispositivo móvel
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    handleResize(); // Verificar no carregamento inicial
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const heroElement = heroRef.current;
     if (!heroElement) return;
+    
+    // Limpar animações anteriores antes de configurar novas
+    ScrollTrigger.getAll().forEach((t) => t.kill());
     
     gsap.to('.hero-bg', {
       y: '30%',
@@ -70,22 +88,25 @@ const Hero: React.FC = () => {
       }
     });
 
-    gsap.from('.service-card', {
-      y: 20,
-      opacity: 0.8,
-      stagger: 0.2,
-      scrollTrigger: {
-        trigger: contentRef.current,
-        start: 'top center',
-        end: 'center center',
-        scrub: 1
-      }
-    });
+    // Apenas aplicar esta animação se não estiver em modo móvel
+    if (!isMobile) {
+      gsap.from('.service-card', {
+        y: 20,
+        opacity: 0.8,
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: 'top center',
+          end: 'center center',
+          scrub: 1
+        }
+      });
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [isMobile]); // Adicionar isMobile como dependência
 
   const scrollToNextSection = () => {
     const aboutSection = document.getElementById('benefits');
@@ -174,35 +195,21 @@ const Hero: React.FC = () => {
             </motion.div>
           </div>
 
-          <div className="w-full lg:w-1/2 space-y-4">
-            {services.map((service, index) => (
-              <ServiceCard 
-                key={index}
-                icon={service.icon}
-                title={service.title}
-                desc={service.desc}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-        
-        {/* Indicador de confiança */}
-        {/* <motion.div 
-          className="absolute bottom-12 left-4 md:left-8 bg-white/80 dark:bg-[var(--color-primary)]/70 backdrop-blur-sm px-4 p rounded-lg shadow-lg z-20"
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-[var(--color-accent)] text-[var(--color-accent)]" />
+          {/* Contentor dos cards com maior visibilidade no mobile */}
+          <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
+            <div className={`grid gap-4 ${isMobile ? 'grid-cols-1' : 'space-y-4'}`}>
+              {services.map((service, index) => (
+                <ServiceCard 
+                  key={index}
+                  icon={service.icon}
+                  title={service.title}
+                  desc={service.desc}
+                  index={index}
+                />
               ))}
             </div>
-            <span className="text-sm font-medium">+200 clientes satisfeitos</span>
           </div>
-        </motion.div> */}
+        </div>
       </div>
 
       {/* Separador Visual */}

@@ -3,29 +3,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Paleta de cores atualizada para um design mais acessível e minimalista */
+/* Paleta de cores baseada no design fornecido */
 :root {
-  /* Cores principais */
-  --color-primary: #1E3A8A; 
-  --color-accent: #3B82F6; 
-  --color-secondary: #64748B; 
-  --color-neutral: #F1F5F9; 
-  --color-text: #0F172A; 
-  --color-text-light: #FFFFFF; 
-  --color-dark: #1F2937; 
-  --color-light: #fffdfd; 
-  --color-gray: #F8FAFC; 
-  --color-card-bg: #FFFFFF; 
-  --color-card-text: #0F172A; 
-  --color-paralel: #F8FAFC;
+  /* Cores principais da nova paleta */
+  --color-primary: #252525; /* Preto */
+  --color-accent: #2B8D9A; /* Azul Turquesa */
+  --color-secondary: #8D9192; /* Cinza Médio */
+  --color-neutral: #EDEDED; /* Cinza Claro */
+  --color-text: #252525; /* Preto para texto */
+  --color-text-light: #FFFFFF; /* Branco para texto sobre fundos escuros */
+  --color-dark: #252525; /* Preto para fundos escuros */
+  --color-light: #FFFFFF; /* Branco para fundos claros */
+  --color-gray: #EDEDED; /* Cinza Claro para backgrounds secundários */
+  --color-card-bg: #FFFFFF; /* Branco para cards */
+  --color-card-text: #252525; /* Preto para texto em cards */
+  --color-paralel: #F5F5F5; /* Cinza muito claro para paralax */
   
   /* Adição de tom intermediário */
-  --color-accent-dark: #1D4ED8; /* Azul escuro para hover ou variantes */
+  --color-accent-dark: #247885; /* Versão mais escura do turquesa para hover */
   
   /* RGB para animações e opacidades */
-  --color-accent-rgb: 59, 130, 246;
-  --color-secondary-rgb: 100, 116, 139;
-  --color-neutral-rgb: 241, 245, 249;
+  --color-accent-rgb: 43, 141, 154; /* Azul Turquesa em RGB */
+  --color-secondary-rgb: 141, 145, 146; /* Cinza Médio em RGB */
+  --color-neutral-rgb: 237, 237, 237; /* Cinza Claro em RGB */
   
   /* Sistema de espaçamento consistente */
   --space-xs: 0.25rem;
@@ -44,22 +44,22 @@
 }
 
 [data-theme="dark"] {
-  /* Tema Escuro */
-  --color-primary: #0F172A; 
-  --color-accent: #2563EB; /* Substitui #60A5FA por um azul mais escuro e vibrante */
-  --color-secondary: #94A3B8; 
-  --color-neutral: #334155; 
-  --color-text: #F8FAFC; 
-  --color-text-light: #FFFFFF; 
-  --color-dark: #0F172A; 
-  --color-light: #1E293B; 
-  --color-gray: #2D3748; /* Diferencia do --color-light, mais escuro */
-  --color-paralel: #F8FAFC; 
-  --color-card-bg: #1E293B; 
-  --color-card-text: #F1F5F9; 
+  /* Tema Escuro com a nova paleta */
+  --color-primary: #252525; /* Preto */
+  --color-accent: #2B8D9A; /* Azul Turquesa */
+  --color-secondary: #8D9192; /* Cinza Médio */
+  --color-neutral: #8D9192; /* Cinza Médio para neutro no dark mode */
+  --color-text: #FFFFFF; /* Branco para texto no dark mode */
+  --color-text-light: #FFFFFF; /* Branco para texto sobre fundos escuros */
+  --color-dark: #252525; /* Preto */
+  --color-light: #333333; /* Uma versão um pouco mais clara do preto para o fundo */
+  --color-gray: #3A3A3A; /* Cinza escuro para backgrounds secundários */
+  --color-paralel: #EDEDED; /* Cinza claro */
+  --color-card-bg: #333333; /* Fundo de cards no dark mode */
+  --color-card-text: #FFFFFF; /* Texto branco para cards no dark mode */
   
   /* Adição de tom intermediário */
-  --color-accent-dark: #1D4ED8; /* Consistência com o claro */
+  --color-accent-dark: #247885; /* Versão mais escura do turquesa para hover */
 }
 
 /* Definindo fontes */

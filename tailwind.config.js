@@ -26,6 +26,12 @@ export default {
         gray: 'var(--color-gray)',
         paralel: 'var(--color-paralel)',
         'accent-dark': 'var(--color-accent-dark)',
+        // Novas cores da paleta
+        black: '#252525',
+        'gray-medium': '#8D9192',
+        'light-gray': '#EDEDED',
+        white: '#FFFFFF',
+        teal: '#2B8D9A',
         accent: {
           DEFAULT: 'var(--color-accent)',
           20: 'rgba(var(--color-accent-rgb), 0.2)', // Adiciona suporte explícito

@@ -5,7 +5,7 @@
 
 /* Paleta de cores atualizada para um design mais acessível e minimalista */
 :root {
-  /* Tema Claro */
+  /* Cores principais */
   --color-primary: #1E3A8A; 
   --color-accent: #3B82F6; 
   --color-secondary: #64748B; 
@@ -13,33 +13,53 @@
   --color-text: #0F172A; 
   --color-text-light: #FFFFFF; 
   --color-dark: #1F2937; 
-  --color-light: #f5f0f0; 
+  --color-light: #fffdfd; 
   --color-gray: #F8FAFC; 
   --color-card-bg: #FFFFFF; 
   --color-card-text: #0F172A; 
   --color-paralel: #F8FAFC;
   
+  /* Adição de tom intermediário */
+  --color-accent-dark: #1D4ED8; /* Azul escuro para hover ou variantes */
+  
   /* RGB para animações e opacidades */
   --color-accent-rgb: 59, 130, 246;
   --color-secondary-rgb: 100, 116, 139;
   --color-neutral-rgb: 241, 245, 249;
+  
+  /* Sistema de espaçamento consistente */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+  --space-3xl: 3rem;
+
+  /* Elevações para sombras consistentes */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] {
   /* Tema Escuro */
   --color-primary: #0F172A; 
-  --color-accent: #60A5FA; 
+  --color-accent: #2563EB; /* Substitui #60A5FA por um azul mais escuro e vibrante */
   --color-secondary: #94A3B8; 
   --color-neutral: #334155; 
   --color-text: #F8FAFC; 
   --color-text-light: #FFFFFF; 
   --color-dark: #0F172A; 
   --color-light: #1E293B; 
-  --color-gray: #1E293B; 
+  --color-gray: #2D3748; /* Diferencia do --color-light, mais escuro */
   --color-paralel: #F8FAFC; 
   --color-card-bg: #1E293B; 
   --color-card-text: #F1F5F9; 
-  --color-accent-rgb: 255, 135, 135;
+  
+  /* Adição de tom intermediário */
+  --color-accent-dark: #1D4ED8; /* Consistência com o claro */
 }
 
 /* Definindo fontes */
@@ -108,7 +128,10 @@ html.no-scroll {
   }
 
   .btn-primary {
-    @apply bg-[var(--color-accent)] text-[var(--color-text-light)] hover:bg-opacity-90;
+    @apply bg-[var(--color-accent)] text-[var(--color-text-light)];
+  }
+  .btn-primary:hover {
+    background-color: var(--color-accent-dark);
   }
 
   .btn-secondary {
@@ -116,7 +139,10 @@ html.no-scroll {
   }
 
   .btn-outline {
-    @apply border border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10;
+    @apply border border-[var(--color-accent)] text-[var(--color-accent)];
+  }
+  .btn-outline:hover {
+    background-color: rgba(var(--color-accent-rgb), 0.1);
   }
 
   .section-title {
@@ -128,7 +154,12 @@ html.no-scroll {
   }
 
   .card {
-    @apply bg-[var(--color-card-bg)] p-6 rounded-lg shadow-sm transition-all duration-300 border border-neutral-30;
+    @apply bg-[var(--color-card-bg)] p-6 rounded-lg transition-all duration-300 border border-neutral-30;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-md);
   }
 
   .card-text {
@@ -140,7 +171,7 @@ html.no-scroll {
   }
 
   .input-field {
-    @apply w-full px-4 py-3 rounded-md border focus:outline-none focus:ring-2 dark:bg-[var(--color-neutral)]/10 dark:border-[var(--color-neutral)]/20 transition-all;
+    @apply w-full px-4 py-3 rounded-md border focus:outline-none focus:ring-2 transition-all;
   }
 
   .badge {
@@ -148,9 +179,14 @@ html.no-scroll {
   }
 
   .badge-primary {
-    background-color: rgba(var(--color-accent-rgb), 0.2); /* 20% de opacidade */
-    color: var(--color-accent);
+    @apply bg-accent-20 text-[var(--color-accent)];
   }
+}
+
+/* Estilos específicos para input-field no modo escuro */
+.dark .input-field {
+  background-color: rgba(var(--color-neutral-rgb), 0.1);
+  border-color: rgba(var(--color-neutral-rgb), 0.2);
 }
 
 /* Utilitários de texto */
@@ -210,4 +246,57 @@ html.no-scroll {
 
 .dark .text-white {
   color: var(--color-text-light);
+}
+
+/* Classe de pulse personalizada */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Novas classes utilitárias para espaçamento consistente */
+.space-xs {
+  margin: var(--space-xs);
+  padding: var(--space-xs);
+}
+
+.space-sm {
+  margin: var(--space-sm);
+  padding: var(--space-sm);
+}
+
+.space-md {
+  margin: var(--space-md);
+  padding: var(--space-md);
+}
+
+.space-lg {
+  margin: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.space-xl {
+  margin: var(--space-xl);
+  padding: var(--space-xl);
+}
+
+/* Classes para uso de sombras personalizadas */
+.shadow-custom-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-custom-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-custom-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-custom-xl {
+  box-shadow: var(--shadow-xl);
 }
