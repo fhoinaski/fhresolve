@@ -53,7 +53,7 @@ const Testimonials: React.FC = () => {
   return (
     <section id="testimonials" className="py-20 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
       <div className="container">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <motion.span 
             className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
             initial={{ opacity: 0, y: 10 }}
@@ -82,6 +82,26 @@ const Testimonials: React.FC = () => {
             A satisfação dos nossos clientes é o nosso maior orgulho
           </motion.p>
         </div>
+        
+        {/* Métricas de satisfação */}
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {[
+            { value: '98%', label: 'Satisfação' },
+            { value: '200+', label: 'Clientes' },
+            { value: '500+', label: 'Projetos concluídos' }
+          ].map((stat, index) => (
+            <div key={index} className="text-center p-6 rounded-lg bg-white/10 backdrop-blur-sm border border-[var(--color-neutral)]/20">
+              <h3 className="text-3xl font-bold text-[var(--color-accent)] mb-1">{stat.value}</h3>
+              <p className="text-sm text-[var(--color-text)]/70">{stat.label}</p>
+            </div>
+          ))}
+        </motion.div>
 
         <div
           className="relative max-w-4xl mx-auto"
@@ -132,7 +152,6 @@ const Testimonials: React.FC = () => {
                 </div>
               </motion.div>
             </AnimatePresence>
-
             <div className="flex justify-between items-center mt-10">
               <motion.button
                 whileHover={{ scale: 1.1 }}

@@ -59,9 +59,9 @@ const Portfolio: React.FC = () => {
   const categories = ['todos', 'elétrica', 'hidráulica', 'montagem', 'pintura'];
 
   return (
-    <section id="portfolio" className="py-20 bg-white dark:bg-[var(--color-primary)]">
+    <section id="portfolio" className="py-16 sm:py-20 bg-white dark:bg-[var(--color-primary)]">
       <div className="container">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.span 
             className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
             initial={{ opacity: 0, y: 10 }}
@@ -69,7 +69,7 @@ const Portfolio: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Nossos Trabalhos
+            Trabalhos Realizados
           </motion.span>
           <motion.h2 
             className="section-title mb-4 text-[var(--color-dark)]"
@@ -78,7 +78,7 @@ const Portfolio: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Portfólio
+            Nosso Portfólio
           </motion.h2>
           <motion.p 
             className="section-subtitle text-[var(--color-dark)]"
@@ -87,11 +87,10 @@ const Portfolio: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Confira alguns de nossos trabalhos recentes
+            Conheça alguns dos nossos trabalhos recentes
           </motion.p>
           
-          {/* Filtro de categorias responsivo */}
-          <div className="relative mb-12">
+          <div className="relative mb-10">
             <div className="md:hidden">
               <motion.button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -139,7 +138,7 @@ const Portfolio: React.FC = () => {
                 <motion.button
                   key={category}
                   onClick={() => setFilter(category)}
-                  className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  className={`px-4 py-2 rounded-md text-sm transition-colors ${
                     filter === category 
                       ? 'bg-[var(--color-accent)] text-white font-medium' 
                       : 'bg-[var(--color-gray)] dark:bg-[var(--color-neutral)]/10 text-[var(--color-text)] dark:text-[var(--color-text)] hover:bg-[var(--color-neutral)]/20'
@@ -155,7 +154,7 @@ const Portfolio: React.FC = () => {
         </div>
 
         <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
           layout
         >
           <AnimatePresence mode="popLayout">
@@ -167,35 +166,40 @@ const Portfolio: React.FC = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 cursor-pointer group"
+                className="bg-[var(--color-card-bg)] rounded-lg overflow-hidden shadow-md hover:shadow-xl border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 cursor-pointer group transition-all duration-300"
                 onClick={() => setSelectedImage(item.image)}
-                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}
+                whileHover={{ y: -8 }}
               >
                 <div className="relative overflow-hidden aspect-[4/3]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark)]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                  
                   <img 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                     loading="lazy" 
                   />
-                  <div className="absolute inset-0 bg-[var(--color-primary)]/20 group-hover:opacity-0 transition-opacity duration-300"></div>
                   
-                  <div className="absolute bottom-0 left-0 right-0 p-2">
-                    <span className="inline-block px-2 py-1 bg-[var(--color-accent)]/80 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+                  <motion.div 
+                    className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20"
+                    initial={{ y: 50 }}
+                    whileHover={{ y: 0 }}
+                  >
+                    <h3 className="text-lg font-medium text-white mb-1">{item.title}</h3>
+                    <p className="text-sm text-white/90">{item.description}</p>
+                  </motion.div>
+                  
+                  <div className="absolute top-3 right-3 z-20">
+                    <span className="inline-block px-2 py-1 bg-[var(--color-accent)] text-white text-xs font-medium rounded-md backdrop-blur-sm">
                       {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
                     </span>
                   </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-medium mb-1 card-text">{item.title}</h3>
-                  <p className="text-sm card-text-secondary">{item.description}</p>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* Visualizador de imagem em tela cheia */}
         <AnimatePresence>
           {selectedImage && (
             <motion.div

@@ -52,16 +52,10 @@ const ServiceMap: React.FC = () => {
 
   // Detectar se é dispositivo móvel
   useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
+    const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkIfMobile);
-    };
+    return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
   // Sinalizar quando o componente estiver montado
@@ -70,19 +64,15 @@ const ServiceMap: React.FC = () => {
   // Atualizar a visualização do mapa quando o local selecionado mudar
   useEffect(() => {
     if (selectedLocation) {
-      const location = locations.find(loc => loc.name === selectedLocation);
-      if (location) {
-        setCurrentView(location.position as [number, number]);
-      }
+      const location = locations.find((loc) => loc.name === selectedLocation);
+      if (location) setCurrentView(location.position as [number, number]);
     }
   }, [selectedLocation]);
 
   // Função para selecionar uma localização
   const handleLocationSelect = (locationName: string) => {
     setSelectedLocation(locationName);
-    if (isMobile) {
-      setActiveTab('map');
-    }
+    if (isMobile) setActiveTab('map');
     setIsUsingGeolocation(false);
   };
 
@@ -121,7 +111,7 @@ const ServiceMap: React.FC = () => {
     <section id="map" className="py-20 bg-[var(--color-gray)] dark:bg-[var(--color-primary)]">
       <div className="container">
         <div className="text-center mb-16">
-          <motion.span 
+          <motion.span
             className="inline-flex items-center px-3 py-1 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -130,7 +120,7 @@ const ServiceMap: React.FC = () => {
           >
             Localização
           </motion.span>
-          <motion.h2 
+          <motion.h2
             className="section-title mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -139,8 +129,8 @@ const ServiceMap: React.FC = () => {
           >
             Áreas Atendidas
           </motion.h2>
-          <motion.p 
-            className="section-subtitle dark:text-opacity-80"
+          <motion.p
+            className="section-subtitle text-contrast-80"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -152,14 +142,14 @@ const ServiceMap: React.FC = () => {
 
         {/* Seletor de abas para dispositivos móveis */}
         {isMobile && (
-          <div className="flex mx-auto mb-6 rounded-lg overflow-hidden shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 max-w-sm">
+          <div className="flex mx-auto mb-6 rounded-lg overflow-hidden shadow-custom-sm border border-[var(--color-neutral)]/30 max-w-sm">
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => setActiveTab('map')}
               className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
-                activeTab === 'map' 
-                  ? 'bg-[var(--color-accent)] text-white font-medium' 
-                  : 'bg-white dark:bg-[var(--color-neutral)]/5 text-[var(--color-text)] dark:text-[var(--color-text)]'
+                activeTab === 'map'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-text-light)] font-medium'
+                  : 'bg-[var(--color-card-bg)] text-[var(--color-card-text)] hover:bg-[var(--color-accent)]/10'
               }`}
               aria-label="Ver mapa"
             >
@@ -170,9 +160,9 @@ const ServiceMap: React.FC = () => {
               whileTap={{ scale: 0.98 }}
               onClick={() => setActiveTab('list')}
               className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${
-                activeTab === 'list' 
-                  ? 'bg-[var(--color-accent)] text-white font-medium' 
-                  : 'bg-white dark:bg-[var(--color-neutral)]/5 text-[var(--color-text)] dark:text-[var(--color-text)]'
+                activeTab === 'list'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-text-light)] font-medium'
+                  : 'bg-[var(--color-card-bg)] text-[var(--color-card-text)] hover:bg-[var(--color-accent)]/10'
               }`}
               aria-label="Ver lista de regiões"
             >
@@ -186,7 +176,7 @@ const ServiceMap: React.FC = () => {
           {/* Lista de localizações */}
           <AnimatePresence mode="wait">
             {(activeTab === 'list' || !isMobile) && (
-              <motion.div 
+              <motion.div
                 key="region-list"
                 className="md:col-span-1"
                 initial="hidden"
@@ -194,9 +184,9 @@ const ServiceMap: React.FC = () => {
                 exit="hidden"
                 variants={isMobile ? tabVariants : {}}
               >
-                <div className="bg-white dark:bg-[var(--color-neutral)]/5 rounded-xl p-5 shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20">
-                  <h3 className="text-lg font-medium mb-6 flex items-center text-[var(--color-text)] dark:text-[var(--color-text)]">
-                    <MapPin className="h-5 w-5 text-[var(--color-accent)] mr-2" /> 
+                <div className="card">
+                  <h3 className="text-lg font-medium mb-6 flex items-center card-text">
+                    <MapPin className="h-5 w-5 text-[var(--color-accent)] mr-2" />
                     Regiões Atendidas
                   </h3>
                   <ul className="space-y-2">
@@ -205,46 +195,52 @@ const ServiceMap: React.FC = () => {
                         key={location.name}
                         className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                           location.name === selectedLocation
-                            ? 'bg-[var(--color-accent)] text-white' 
-                            : 'bg-[var(--color-gray)] dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-neutral)]/20 dark:hover:bg-[var(--color-neutral)]/20'
+                            ? 'bg-[var(--color-accent)] text-[var(--color-text-light)]'
+                            : 'bg-[var(--color-gray)] dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-neutral)]/20'
                         }`}
                         whileHover={{ scale: 1.02, x: 2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleLocationSelect(location.name)}
                       >
                         <div className="flex items-center gap-2">
-                          <span className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center ${
-                            location.name === selectedLocation
-                              ? 'bg-white/20' 
-                              : 'bg-[var(--color-accent)]/10'
-                          }`}>
-                            <MapPin className={`h-4 w-4 ${
+                          <span
+                            className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center ${
                               location.name === selectedLocation
-                                ? 'text-white' 
-                                : 'text-[var(--color-accent)]'
-                            }`} />
+                                ? 'bg-[var(--color-text-light)]/20'
+                                : 'bg-[var(--color-accent)]/10'
+                            }`}
+                          >
+                            <MapPin
+                              className={`h-4 w-4 ${
+                                location.name === selectedLocation
+                                  ? 'text-[var(--color-text-light)]'
+                                  : 'text-[var(--color-accent)]'
+                              }`}
+                            />
                           </span>
                           <span className="font-medium">{location.name}</span>
                           {location.primary && location.name === selectedLocation && (
-                            <span className="text-xs ml-auto bg-white/20 px-2 py-0.5 rounded-full">Principal</span>
+                            <span className="text-xs ml-auto bg-[var(--color-text-light)]/20 px-2 py-0.5 rounded-full">
+                              Principal
+                            </span>
                           )}
                         </div>
                       </motion.li>
                     ))}
                   </ul>
-                  
-                  <div className="mt-6 pt-4 border-t border-[var(--color-neutral)]/20 dark:border-[var(--color-neutral)]/10">
-                    <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-text)]/70 mb-4">
+
+                  <div className="mt-6 pt-4 border-t border-[var(--color-neutral)]/20">
+                    <p className="text-sm card-text-secondary mb-4">
                       Atendemos estas regiões e arredores. Consulte disponibilidade.
                     </p>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleGetUserLocation}
-                      className="w-full py-2 px-4 bg-white dark:bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/5 rounded-lg flex items-center justify-center gap-2 border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 transition-colors"
+                      className="btn btn-outline w-full flex items-center justify-center gap-2"
                     >
                       <Navigation size={16} className="text-[var(--color-accent)]" />
-                      <span className="text-[var(--color-text)] dark:text-[var(--color-text)]">Minha localização</span>
+                      <span>Minha localização</span>
                     </motion.button>
                   </div>
                 </div>
@@ -263,21 +259,20 @@ const ServiceMap: React.FC = () => {
                 exit="hidden"
                 variants={isMobile ? tabVariants : {}}
               >
-                <div className="bg-white dark:bg-[var(--color-neutral)]/5 rounded-xl p-2 shadow-sm border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20 h-[450px] md:h-[500px] relative overflow-hidden">
+                <div className="card h-[450px] md:h-[500px] relative overflow-hidden p-2">
                   {isMounted && (
-                    <MapContainer 
-                      center={[-27.5132, -48.4618]} 
-                      zoom={12} 
+                    <MapContainer
+                      center={[-27.5132, -48.4618]}
+                      zoom={12}
                       style={{ height: '100%', width: '100%', borderRadius: '0.5rem' }}
                       className="z-10"
                     >
-                      <TileLayer 
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       />
-                      
                       <SetViewOnLocation location={currentView} />
-                      
+
                       {/* Marcador de localização do usuário */}
                       {isUsingGeolocation && (
                         <motion.div
@@ -285,78 +280,81 @@ const ServiceMap: React.FC = () => {
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.5 }}
                         >
-                          <Marker 
-                            position={currentView} 
+                          <Marker
+                            position={currentView}
                             icon={new Icon({
                               iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
                               iconSize: [25, 41],
                               iconAnchor: [12, 41],
-                              className: 'user-location-marker'
+                              className: 'user-location-marker',
                             })}
                           >
-                            <Popup>Sua localização atual</Popup>
+                            <Popup className="card">Sua localização atual</Popup>
                           </Marker>
-                          <Circle 
-                            center={currentView} 
+                          <Circle
+                            center={currentView}
                             radius={300}
                             pathOptions={{
-                              color: '#2D9CDB',
-                              fillColor: '#2D9CDB',
+                              color: 'var(--color-accent)',
+                              fillColor: 'var(--color-accent)',
                               fillOpacity: 0.2,
-                              weight: 2
+                              weight: 2,
                             }}
                           />
                         </motion.div>
                       )}
-                      
+
                       {/* Marcadores das regiões */}
                       {locations.map((location) => (
-                        <motion.div 
-                          key={location.name} 
-                          variants={markerVariants} 
-                          initial="hidden" 
+                        <motion.div
+                          key={location.name}
+                          variants={markerVariants}
+                          initial="hidden"
                           animate="visible"
                         >
-                          <Marker 
-                            position={location.position as [number, number]} 
+                          <Marker
+                            position={location.position as [number, number]}
                             icon={location.name === selectedLocation ? activeMarkerIcon : markerIcon}
                             eventHandlers={{
                               click: () => {
                                 setSelectedLocation(location.name);
                                 setIsUsingGeolocation(false);
-                              }
+                              },
                             }}
                           >
-                            <Popup>
+                            <Popup className="card">
                               <div className="text-center p-1">
-                                <h3 className="font-bold text-base mb-1">{location.name}</h3>
-                                <p className="text-sm">Área atendida</p>
+                                <h3 className="font-bold text-base mb-1 card-text">{location.name}</h3>
+                                <p className="text-sm card-text-secondary">Área atendida</p>
                                 {location.primary && (
-                                  <span className="inline-block mt-1 px-2 py-0.5 bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-xs rounded-full">
-                                    Sede Principal
-                                  </span>
+                                  <span className="badge badge-primary mt-1">Sede Principal</span>
                                 )}
                               </div>
                             </Popup>
                           </Marker>
-                          <Circle 
-                            center={location.position as [number, number]} 
+                          <Circle
+                            center={location.position as [number, number]}
                             radius={2000}
                             pathOptions={{
-                              color: location.name === selectedLocation ? '#2D9CDB' : '#9e9e9e',
-                              fillColor: location.name === selectedLocation ? '#2D9CDB' : '#9e9e9e',
+                              color:
+                                location.name === selectedLocation
+                                  ? 'var(--color-accent)'
+                                  : 'var(--color-secondary)',
+                              fillColor:
+                                location.name === selectedLocation
+                                  ? 'var(--color-accent)'
+                                  : 'var(--color-secondary)',
                               fillOpacity: location.name === selectedLocation ? 0.2 : 0.1,
-                              weight: location.name === selectedLocation ? 2 : 1
                             }}
                           />
                         </motion.div>
                       ))}
                     </MapContainer>
                   )}
-                  
+
                   {/* Botão de localização */}
-                  <motion.button 
-                    className="absolute bottom-4 right-4 bg-white dark:bg-[var(--color-primary)] p-3 rounded-full shadow-md text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors z-[1000] border border-[var(--color-neutral)]/30 dark:border-[var(--color-neutral)]/20"
+                  <motion.button
+                    className="absolute bottom-4 right-4 btn btn-outline p-3 rounded-full z-[1000]"
                     onClick={handleGetUserLocation}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -364,16 +362,16 @@ const ServiceMap: React.FC = () => {
                   >
                     <Navigation size={20} />
                   </motion.button>
-                  
+
                   {/* Indicador de localização selecionada em dispositivos móveis */}
                   {isMobile && selectedLocation && !isUsingGeolocation && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute top-4 left-0 right-0 mx-auto w-max bg-white dark:bg-[var(--color-neutral)]/80 px-3 py-1.5 rounded-full shadow-md z-[1000] flex items-center gap-2"
+                      className="absolute top-4 left-0 right-0 mx-auto w-max card px-3 py-1.5 z-[1000] flex items-center gap-2"
                     >
                       <MapPin size={14} className="text-[var(--color-accent)]" />
-                      <span className="font-medium text-sm">{selectedLocation}</span>
+                      <span className="font-medium text-sm card-text">{selectedLocation}</span>
                     </motion.div>
                   )}
                 </div>
@@ -381,9 +379,9 @@ const ServiceMap: React.FC = () => {
             )}
           </AnimatePresence>
         </div>
-        
+
         <div className="mt-6 text-center">
-          <p className="text-sm text-[var(--color-text)]/70 dark:text-[var(--color-text)]/70 italic">
+          <p className="text-sm text-contrast-60 italic">
             Verifique disponibilidade para sua região
           </p>
         </div>

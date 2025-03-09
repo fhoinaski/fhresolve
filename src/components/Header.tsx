@@ -16,10 +16,9 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
 
   const navLinks = [
     { name: 'Início', href: '#hero' },
-    { name: 'Sobre', href: '#about' },
     { name: 'Serviços', href: '#benefits' },
-    { name: 'Projetos', href: '#portfolio' },
-    { name: 'Depoimentos', href: '#testimonials' },
+    { name: 'Sobre', href: '#about' },
+    { name: 'Trabalhos', href: '#portfolio' },
     { name: 'Contato', href: '#contact' },
   ];
 
@@ -64,7 +63,6 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
     }
   };
 
-  // Design minimalista com transparência e backdrop blur
   const getHeaderBackground = () => {
     if (isOpen) {
       return theme === 'light'
@@ -83,7 +81,6 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
       : 'bg-[var(--color-primary)]/80 backdrop-blur-sm';
   };
 
-  // Estilo minimalista para links
   const getLinkClass = (isActive: boolean) => {
     const baseClass = "relative font-medium py-2 px-1 transition-colors";
     
@@ -102,8 +99,8 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed w-full z-50 transition-all duration-300 py-4 ${
-        scrolled ? 'py-3' : 'py-4'
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled ? 'py-2' : 'py-3'
       } ${getHeaderBackground()}`}
       aria-label="Navegação principal"
     >
@@ -122,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
           whileTap={{ scale: 0.98 }}
         >
           <Wrench className="h-6 w-6 text-[var(--color-accent)]" aria-hidden="true" />
-          <span className="text-lg font-bold text-[var(--color-accent)] dark:text-[var(--color-text)] font-jakarta">FH Resolve</span>
+          <span className="text-lg font-bold text-[var(--color-accent)] dark:text-[var(--color-text)]">FH Resolve</span>
         </motion.a>
 
         <nav className="hidden md:flex items-center gap-6" aria-label="Menu de navegação desktop">
@@ -153,10 +150,10 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
           })}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <motion.button
             onClick={toggleTheme}
-            className="p-2 rounded-full bg-[var(--color-neutral)]/10 hover:bg-[var(--color-accent)]/10 transition-colors z-50"
+            className="p-2 rounded-full bg-[var(--color-neutral)]/5 hover:bg-[var(--color-accent)]/10 transition-colors z-50"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label={`Alternar para tema ${theme === 'light' ? 'escuro' : 'claro'}`}
@@ -168,13 +165,13 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
             href="https://wa.me/5548991919791"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white rounded-full hover:bg-[var(--color-accent)]/90 transition-all shadow-sm z-50"
-            whileHover={{ scale: 1.03 }}
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[var(--color-accent)] text-white rounded-md hover:bg-[var(--color-accent-dark)] transition-all shadow-sm z-50"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             aria-label="Contato via WhatsApp"
           >
             <MessageCircle size={16} aria-hidden="true" />
-            <span className="text-sm font-medium">WhatsApp</span>
+            <span className="text-sm font-medium">Orçamento Grátis</span>
           </motion.a>
 
           <motion.button
@@ -190,13 +187,12 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
           </motion.button>
         </div>
 
-        {/* Menu Mobile - Corrigido para abrir completamente */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               id="mobile-menu"
               ref={navRef}
-              className="fixed inset-0 w-full min-h-screen md:hidden z-50 overflow-y-auto" // Garantindo altura mínima total
+              className="fixed inset-0 w-full min-h-screen md:hidden z-40 overflow-y-auto"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}

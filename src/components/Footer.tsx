@@ -12,12 +12,10 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[var(--color-primary)] text-[var(--color-text)] relative">
-      {/* Fundo decorativo suave */}
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-gradient-to-br from-[var(--color-accent)]/20 via-transparent to-transparent" />
       
       <div className="container py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Logo e descrição */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +48,6 @@ const Footer: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Links rápidos */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -81,7 +78,6 @@ const Footer: React.FC = () => {
             </ul>
           </motion.div>
 
-          {/* Serviços */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -112,7 +108,6 @@ const Footer: React.FC = () => {
             </ul>
           </motion.div>
 
-          {/* Contato */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

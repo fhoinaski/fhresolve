@@ -2,6 +2,12 @@
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    'dark:bg-opacity-10',
+    'dark:border-opacity-20',
+    'dark:bg-[var(--color-neutral)]',
+    'dark:border-[var(--color-neutral)]'
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -18,18 +24,23 @@ export default {
         dark: 'var(--color-dark)',
         light: 'var(--color-light)',
         gray: 'var(--color-gray)',
-        paralel: 'var(--color-paralel)', // Nota: Verifique se essa variável existe no index.css
+        paralel: 'var(--color-paralel)',
+        'accent-dark': 'var(--color-accent-dark)',
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          20: 'rgba(var(--color-accent-rgb), 0.2)', // Adiciona suporte explícito
+        },
       },
       borderColor: {
-        // Adicionando suporte para bordas personalizadas com variáveis CSS e opacidade
         'neutral-30': 'rgba(var(--color-neutral-rgb), 0.3)',
-        'accent-20': 'rgba(var(--color-accent-rgb), 0.2)', // Para .card-hover
+        'accent-20': 'rgba(var(--color-accent-rgb), 0.2)',
       },
       borderRadius: {
         '4xl': '2rem',
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 4s ease-in-out infinite',
       },
       transitionProperty: {
         'width': 'width',
@@ -41,6 +52,16 @@ export default {
       },
       boxShadow: {
         'inner-sm': 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'custom-sm': 'var(--shadow-sm)',
+        'custom-md': 'var(--shadow-md)',
+        'custom-lg': 'var(--shadow-lg)',
+        'custom-xl': 'var(--shadow-xl)',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
       },
     },
   },
