@@ -17,7 +17,6 @@ export default {
       },
       colors: {
         primary: 'var(--color-primary)',
-        accent: 'var(--color-accent)',
         secondary: 'var(--color-secondary)',
         neutral: 'var(--color-neutral)',
         'text-color': 'var(--color-text)',

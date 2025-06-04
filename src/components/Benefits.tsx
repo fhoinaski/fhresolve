@@ -30,25 +30,11 @@ const Benefits: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { once: true, amount: 0.2 });
   const [selectedService, setSelectedService] = useState<ServiceDetailsProps | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isCheckingLocation, setIsCheckingLocation] = useState(false);
 
-  // Detectar dispositivo móvel
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
+
 
   // Calcular distância entre dois pontos em km (fórmula de Haversine)
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
