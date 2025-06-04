@@ -7,20 +7,20 @@ interface HeaderProps {
   toggleTheme: () => void;
 }
 
+const navLinks = [
+  { name: 'Início', href: '#hero' },
+  { name: 'Serviços', href: '#benefits' },
+  { name: 'Sobre', href: '#about' },
+  { name: 'Trabalhos', href: '#portfolio' },
+  { name: 'Contato', href: '#contact' },
+];
+
 const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
-
-  const navLinks = [
-    { name: 'Início', href: '#hero' },
-    { name: 'Serviços', href: '#benefits' },
-    { name: 'Sobre', href: '#about' },
-    { name: 'Trabalhos', href: '#portfolio' },
-    { name: 'Contato', href: '#contact' },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [navLinks]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
