@@ -131,6 +131,13 @@ const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary)]/90 via-[var(--color-primary)]/80 to-[var(--color-primary)]/70"></div>
       </div>
 
+      {/* Badge de credibilidade */}
+      <img
+        src="/credibility.svg"
+        alt="Selo de credibilidade"
+        className="absolute top-6 right-6 w-20 z-5 opacity-60 pointer-events-none"
+      />
+
       <div ref={contentRef} className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-0">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
           <div className="w-full lg:w-1/2 max-w-xl">
